@@ -26,7 +26,11 @@ class SignUp extends React.Component {
 		const { displayName, email, password, confirmPassword } = this.state;
 
 		if(password !== confirmPassword) {
-			alert("passwords do not match");
+			alert("Passwords do not match");
+			return;
+		}
+		if(password.length < 6) {
+			alert("Password must be at least 6 characters");
 			return;
 		}
 
@@ -60,7 +64,7 @@ class SignUp extends React.Component {
 				<h2 className='title'>Need an account?</h2>
 				<span>Sign up with your email and password</span>
 				<form className='sign-up-form' onSubmit={this.handleSubmit}>
-					<FormInput type='text' name='displayName' value={displayName} onChange={this.handleChange} label='display name' required/>
+					<FormInput type='text' name='displayName' value={displayName} onChange={this.handleChange} label='name' required/>
 					<FormInput type='email' name='email' value={email} onChange={this.handleChange} label='email' required/>
 					<FormInput type='password' name='password' value={password} onChange={this.handleChange} label='password' required/>
 					<FormInput type='password' name='confirmPassword' value={confirmPassword} onChange={this.handleChange} label='confirm password' required/>
