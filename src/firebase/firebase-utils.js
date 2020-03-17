@@ -39,6 +39,28 @@ const config = {
   	return userRef;
   };
 
+  export const createUsernameDocument = async (userAuth, {displayName}) => {
+    if(!userAuth) return;
+
+    const usernameRef = firestore.doc(`usernames/${displayName}`);
+
+    const usernameSnapShot = await usernameRef.get();
+
+    if(!usernameSnapShot.exists) {
+      const uid = userAuth.uid;
+
+      try {
+        await usernameRef.set({
+          uid,
+        })
+      } catch (error) {
+        console.log('error creating username', error.message);
+      }
+    }
+
+    return usernameRef;
+  };
+
   firebase.initializeApp(config);
 
   export const auth = firebase.auth();

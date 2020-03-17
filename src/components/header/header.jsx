@@ -10,6 +10,7 @@ import { selectProfileHidden } from '../../redux/profile/profile-selectors';
 
 import ProfileIcon from '../profile-icon/profile-icon';
 import ProfileDropdown from '../profile-dropdown/profile-dropdown';
+import UploadIcon from '../upload-icon/upload-icon';
 
 import './header.scss';
 
@@ -30,6 +31,7 @@ const Header = ({ currentUser, hidden }) => {
                     <Link className='option' to='/'>
                         Home
                     </Link>
+                    <UploadIcon />
                     <ProfileIcon />
                 </div>
                 {hidden ? null : <ProfileDropdown />}
