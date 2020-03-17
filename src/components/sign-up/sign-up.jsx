@@ -5,7 +5,7 @@ import './sign-up.scss';
 import FormInput from '../form-input/form-input';
 import CustomButton from '../custom-button/custom-button';
 
-import { auth, createUserProfileDocument, firestore, createUsernameDocument } from '../../firebase/firebase-utils';
+import { auth, createUserProfileDocument, firestore, createUsernameDocument, actionCodeSettings } from '../../firebase/firebase-utils';
 
 
 class SignUp extends React.Component {
@@ -56,6 +56,8 @@ class SignUp extends React.Component {
 			//SEND EMAIL
 			await createUserProfileDocument(user, {displayName});
 			await createUsernameDocument(user, {displayName});
+
+			// auth.user.sendEmailVerification(actionCodeSettings);
 
 			this.setState({
 			displayName: '',

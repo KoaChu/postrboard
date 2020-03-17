@@ -61,6 +61,10 @@ const config = {
     return usernameRef;
   };
 
+  export const actionCodeSettings = {
+    url: 'http://localhost:3000/'
+  };
+
   firebase.initializeApp(config);
 
   export const auth = firebase.auth();

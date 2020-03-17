@@ -11,6 +11,13 @@ import './App.css';
 import Header from './components/header/header';
 import SignInPage from './pages/sign-in-page/sign-in-page';
 import HomePage from './pages/homepage/homepage';
+import SettingsPage from './pages/settingspage/settingspage';
+import SearchPage from './pages/searchpage/searchpage';
+import FeaturedPage from './pages/featuredpage/featuredpage';
+import NotesPage from './pages/notespage/notespage';
+import MyBoardPage from './pages/myboardpage/myboardpage';
+import FollowingPage from './pages/followingpage/followingpage';
+import FollowersPage from './pages/followerspage/followerspage';
 
 
 
@@ -50,6 +57,14 @@ class App extends Component {
               <Switch>
                 <Route exact path='/' render={() => this.props.currentUser ? (<HomePage />) : (<Redirect to='/signin' />)} />
                 <Route exact path='/signin' render={() => this.props.currentUser ? (<Redirect to='/' />) : (<SignInPage />)} />
+                <Route exact path='/settings' render={() => this.props.currentUser ? (<SettingsPage />) : (<Redirect to='/signin' />)} />
+                <Route exact path='/search' render={() => this.props.currentUser ? (<SearchPage />) : (<Redirect to='/signin' />)} />
+                <Route exact path='/featured' render={() => this.props.currentUser ? (<FeaturedPage />) : (<Redirect to='/signin' />)} />
+                <Route exact path='/following' render={() => this.props.currentUser ? (<FollowingPage />) : (<Redirect to='/signin' />)} />
+                <Route exact path='/followers' render={() => this.props.currentUser ? (<FollowersPage />) : (<Redirect to='/signin' />)} />
+                <Route exact path='/myboard' render={() => this.props.currentUser ? (<MyBoardPage />) : (<Redirect to='/signin' />)} />
+                <Route exact path='/notes' render={() => this.props.currentUser ? (<NotesPage />) : (<Redirect to='/signin' />)} />
+
               </Switch>
            </div>
         );
