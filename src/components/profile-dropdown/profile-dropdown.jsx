@@ -16,11 +16,11 @@ import './profile-dropdown.scss';
 const ProfileDropdown = ({ history, dispatch }) => (
 	<div className='profile-dropdown'>
 		<div className='profile-items'>	
-			<Link className='item' to='/myboard'>My Board</Link>
-			<Link className='item' to='/notes'>Notes</Link>
-			<Link className='item' to='/following'>Following</Link>
-			<Link className='item' to='/followers'>Followers</Link>
-			<Link className='item' to='/settings'>Settings</Link>
+			<Link className='item' to='/myboard' onClick={() => { dispatch(toggleProfileHidden()) }}>My Board</Link>
+			<Link className='item' to='/notes' onClick={() => { dispatch(toggleProfileHidden()) }}>Notes</Link>
+			<Link className='item' to='/following' onClick={() => { dispatch(toggleProfileHidden()) }}>Following</Link>
+			<Link className='item' to='/followers' onClick={() => { dispatch(toggleProfileHidden()) }}>Followers</Link>
+			<Link className='item' to='/settings' onClick={() => { dispatch(toggleProfileHidden()) }}>Settings</Link>
 			<CustomButton onClick={() => {
 			auth.signOut();
 			dispatch(toggleProfileHidden());
