@@ -1,0 +1,16 @@
+.current-account {
+	display: flex;
+	align-items: center;
+	width: 5px;
+	height: 5px;
+	padding: 5px 60px;
+
+/*	.account-image {
+		position: absolute;
+	}*/
+
+	.account-name {
+		align-items: flex-end;
+		margin: 0px 5px;
+	}
+}
