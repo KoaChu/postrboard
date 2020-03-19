@@ -62,6 +62,24 @@ const config = {
     return usernameRef;
   };
 
+  export const getUserProfileImage = async (userAuth, additionalData) => {
+    if(!userAuth) return;
+
+    const userRef = firestore.doc(`users/${userAuth.uid}`);
+    var profileImage = '';
+
+    try {
+      userRef.get()
+              .then((snap) => {
+                profileImage = snap.imageUrl;
+              });
+    } catch (err) {
+      console.log(err);
+    }
+    console.log(profileImage);
+    return profileImage;
+  };
+
   export const actionCodeSettings = {
     url: 'http://localhost:3000/'
   };

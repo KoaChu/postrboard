@@ -1,21 +1,24 @@
 import React, { Component } from 'react';
-import { auth, storageRef, firestore } from '../../firebase/firebase-utils';
+import { auth, storageRef, firestore, getUserProfileImage } from '../../firebase/firebase-utils';
+import { createStructuredSelector } from 'reselect';
+import { connect } from 'react-redux';
 
 // import FormInput from '../form-input/form-input';
 import CustomButton from '../custom-button/custom-button';
+
+import { selectUserImage } from '../../redux/user/user-selectors';
 
 import './profile-settings.scss';
 
 class ProfileSettings extends Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
-        	imageUrl: ''
+        	imageUrl: props.imageUrl
         }
     }
-
 
 
     handleImageChange = (event) => {
@@ -29,7 +32,6 @@ class ProfileSettings extends Component {
 			imageRef.put(profileImage)
 					.then( () => {
 						console.log("Uploaded successfully!");
-						console.log(auth.currentUser.imageUrl);
 					});
 			imageRef.getDownloadURL()
 					.then( (url) => {
@@ -49,7 +51,7 @@ class ProfileSettings extends Component {
         	<div className='profile-settings'>
 	            <form className='settings-form' onSubmit={this.handleSubmit}>
 	            	<div className='image-wrapper'>
-	            		<img src={auth.currentUser.imageUrl} 
+	            		<img src={this.state.imageUrl} 
 	            		alt='PROFILE' 
 	            		className='profile-image'/>
 	            	</div>
@@ -67,4 +69,9 @@ class ProfileSettings extends Component {
     }
 }
 
-export default ProfileSettings;
+const mapStateToProps = createStructuredSelector({
+	imageUrl: selectUserImage
+});
+
+export default connect(mapStateToProps)(ProfileSettings);
+
