@@ -6,7 +6,7 @@ const CurrentAccount = () => {
     return (
         <div className='current-account'>
         	<img src='https://waxidentscandles.com/wp-content/uploads/2019/03/sample.png'
-        		alt='account image'
+        		alt='account'
         		className='account-image'
         		height='60'
         		width='60' />
