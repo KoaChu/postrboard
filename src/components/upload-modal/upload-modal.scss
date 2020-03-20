@@ -1,0 +1,86 @@
+.modal {
+  font-size: 12px;
+  height: 350px;
+  width: 300px;
+}
+.modal > .header {
+  width: 100%;
+  border-bottom: 1px solid gray;
+  font-size: 18px;
+  text-align: center;
+  padding: 5px;
+}
+.modal > .content {
+  width: 120%;
+  height: 80%;
+  padding: 10px 5px;
+  outline: 1px solid black;
+}
+.modal > .actions {
+  display: flex;
+  flex-direction: row;
+  width: 120%;
+  padding: 10px 5px;
+  margin: auto;
+  text-align: center;
+  justify-content: space-around;
+}
+.modal > .close {
+  cursor: pointer;
+  position: absolute;
+  display: block;
+  padding: 2px 5px;
+  line-height: 20px;
+  right: -10px;
+  top: -10px;
+  font-size: 24px;
+  background: #ffffff;
+  border-radius: 18px;
+  border: 1px solid #cfcece;
+}
+
+.open-button {
+  visibility: hidden;
+}
+
+.cancel-button {
+  min-width: 165px;
+  width: auto;
+  height: 50px;
+  letter-spacing: 2px;
+  line-height: 50px;
+  padding: 0 35px 0 35px;
+  font-size: 16px;
+  background-color: maroon;
+  color: white;
+  text-transform: none;
+  font-family: 'Hind Siliguri', sans-serif;
+  font-weight: bolder;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  outline: none;
+
+  &:hover {
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+  }
+
+  
+  &.inverted {
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+
+    &:hover {
+      background-color: black;
+      color: white;
+      border: none;
+    }
+  }
+}
+
+

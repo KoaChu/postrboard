@@ -80,6 +80,18 @@ const config = {
     return profileImage;
   };
 
+  // export const setUserPosts = async (user, additionalData) => {
+  //   if(!userAuth) return;
+
+  //   const userRef = firestore.doc(`users/${userAuth.uid}`);
+  // };
+
+  // export const getUserPosts = async (user, additionalData) => {
+  //   if(!userAuth) return;
+
+
+  // };
+
   export const actionCodeSettings = {
     url: 'http://localhost:3000/'
   };

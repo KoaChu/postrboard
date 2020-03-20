@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { auth, storageRef, firestore, getUserProfileImage } from '../../firebase/firebase-utils';
+import { auth, storageRef, firestore } from '../../firebase/firebase-utils';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 

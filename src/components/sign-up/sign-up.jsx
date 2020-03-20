@@ -5,7 +5,7 @@ import './sign-up.scss';
 import FormInput from '../form-input/form-input';
 import CustomButton from '../custom-button/custom-button';
 
-import { auth, createUserProfileDocument, firestore, createUsernameDocument, actionCodeSettings } from '../../firebase/firebase-utils';
+import { auth, createUserProfileDocument, firestore, createUsernameDocument } from '../../firebase/firebase-utils';
 
 
 class SignUp extends React.Component {
@@ -36,6 +36,10 @@ class SignUp extends React.Component {
 		      } catch (error) {
 		        console.log('error with username check', error.message);
 		      }
+		}
+		if(displayName.length > 30) {
+			alert("Username must be 30 characters or less");
+			return;
 		}
 		if(password !== confirmPassword) {
 			alert("Passwords do not match.");
