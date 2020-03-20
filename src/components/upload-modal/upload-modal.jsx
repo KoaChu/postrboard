@@ -16,11 +16,16 @@ const UploadModal = () => {
 		          &times;
 		        </a>
 		        <div className='modal-header'>
-		        	<h4>Post header</h4>
+		        	<h3>New Post</h3>
 		        </div>
-		        <div className="content">
-		          {" "}
-		          Upload button
+		        <div className="content-wrapper">
+			        <div className="content">
+			          {" "}
+			          Upload button
+			        </div>
+			        <div className='content-text'>
+			        	text
+			        </div>
 		        </div>
 		        <div className="actions">
 		          <Popup

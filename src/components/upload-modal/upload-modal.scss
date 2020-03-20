@@ -3,25 +3,46 @@
 .popup-content {
   border: 2px solid black !important;
   cursor: default;
+  height: 50%;
 }
 .modal {
   font-size: 12px;
-  height: 350px;
-  width: 300px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
-.modal > .content {
-  width: 120%;
-  height: 80%;
+.modal .modal-header {
+  margin-left: 20px;
+}
+.modal .content-wrapper {
+  display: flex;
+  flex-grow: 2;
+  justify-content: space-between;
+}
+.modal .content-text {
+  border: 1px solid red;
   padding: 10px 5px;
+  margin: 0.8em;
+  width: 100%;
+  // position: absolute;
+  // margin-left: 600px;
+}
+.modal .content {
+  // width: 120%;
+  // height: 60%;
+  width: 100%;
+  padding: 10px 5px;
+  margin: 0.8em;
   outline: 1px solid black;
-  outline-style: inset;
+  // outline-style: inset;
 }
 .modal > .actions {
   display: flex;
   flex-direction: row;
-  width: 120%;
+  // width: 120%;
   padding: 10px 5px;
-  margin: auto;
+  margin: 0em 4em;
   text-align: center;
   justify-content: space-around;
 }
@@ -38,6 +59,10 @@
   border-radius: 18px;
   border: 1px solid #cfcece;
 }
+// .modal .custom-button {
+//   width: 8em ;
+//   min-width: 100px;
+// }
 
 .open-button {
   visibility: hidden;
