@@ -1,20 +1,20 @@
+.pop-up {
+}
+.popup-content {
+  border: 2px solid black !important;
+  cursor: default;
+}
 .modal {
   font-size: 12px;
   height: 350px;
   width: 300px;
-}
-.modal > .header {
-  width: 100%;
-  border-bottom: 1px solid gray;
-  font-size: 18px;
-  text-align: center;
-  padding: 5px;
 }
 .modal > .content {
   width: 120%;
   height: 80%;
   padding: 10px 5px;
   outline: 1px solid black;
+  outline-style: inset;
 }
 .modal > .actions {
   display: flex;
