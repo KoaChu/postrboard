@@ -1,5 +1,14 @@
 .pop-up {
 }
+.hidden-input {
+  display: none;
+}
+.upload-popup-content {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  user-select: none;
+}
 .popup-content {
   border: 2px solid black !important;
   cursor: default;
@@ -12,30 +21,50 @@
   flex-direction: column;
   justify-content: space-between;
 }
+.modal .content {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  border: 2px solid black;
+  border-radius: 5px;
+  width: 100%;
+  padding: 10px 5px;
+  margin: 0.8em;
+}
 .modal .modal-header {
   margin-left: 20px;
+  display: flex;
+  flex-direction: row;
 }
 .modal .content-wrapper {
   display: flex;
   flex-grow: 2;
   justify-content: space-between;
 }
-.modal .content-text {
-  border: 1px solid red;
+.modal .upload-icon {
+  display: block;
+  margin: auto;
+  width: 50%;
+  height: 20%;
+}
+.modal .content-text-wrapper {
+  border: 2px solid #ccc;
+  background-color: #f8f8f8;
+  border-radius: 5px;
   padding: 10px 5px;
   margin: 0.8em;
   width: 100%;
   // position: absolute;
   // margin-left: 600px;
 }
-.modal .content {
-  // width: 120%;
-  // height: 60%;
+.modal .content-text {
   width: 100%;
-  padding: 10px 5px;
-  margin: 0.8em;
-  outline: 1px solid black;
-  // outline-style: inset;
+  height: 100%;
+  outline: none;
+  border: none;
+  resize: none;
+  font-size: 1rem;
+  background-color: transparent;
 }
 .modal > .actions {
   display: flex;

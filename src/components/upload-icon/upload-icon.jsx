@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { ReactComponent as Icon } from '../../assets/upload.svg';
+import { ReactComponent as Icon } from '../../assets/plus.svg';
 import UploadModal from '../upload-modal/upload-modal';
 
 import './upload-icon.scss';

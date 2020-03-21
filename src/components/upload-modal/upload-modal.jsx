@@ -1,7 +1,7 @@
 import React from 'react';
 import Popup from 'reactjs-popup';
 
-import { ReactComponent as Icon } from '../../assets/upload.svg';
+import { ReactComponent as Icon } from '../../assets/uploadv2.svg';
 
 import CustomButton from '../custom-button/custom-button';
 
@@ -21,10 +21,21 @@ const UploadModal = () => {
 		        <div className="content-wrapper">
 			        <div className="content">
 			          {" "}
-			          Upload button
+			          <input type='file' id='upload-input' className='hidden-input' />
+			          <Popup trigger={<Icon className='upload-icon' 
+							          		width='1em' 
+							          		height='1em' 
+							          		onClick={() => {
+							          			document.getElementById('upload-input').click();
+							          		}}/>}
+							  position='top center'
+							  on='hover'
+							  className='upload-popup'>
+				      	Upload an image or video
+			          </Popup>
 			        </div>
-			        <div className='content-text'>
-			        	text
+			        <div className='content-text-wrapper'>
+			        	<textarea className='content-text' type='text' placeholder='Write a description...' />
 			        </div>
 		        </div>
 		        <div className="actions">

@@ -33,7 +33,7 @@ const Header = ({ currentUser, hidden }) => {
                     <Link className='option' to='/'>
                         Home
                     </Link>
-                    <UploadIcon />
+                    <UploadIcon className='upload-button' />
                     <ProfileIcon />
                 </div>
                 {hidden ? null : <ProfileDropdown />}
