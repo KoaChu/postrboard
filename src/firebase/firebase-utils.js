@@ -80,17 +80,26 @@ const config = {
     return profileImage;
   };
 
-  // export const setUserPosts = async (user, additionalData) => {
-  //   if(!userAuth) return;
+  export const setUserPosts = async (userAuth, mediaUrl, text, postTitle) => {
+    if(!userAuth) return;
+    
+    const userRef = firestore.doc(`users/${userAuth.uid}`);
+  };
 
-  //   const userRef = firestore.doc(`users/${userAuth.uid}`);
-  // };
+  export const uploadUserMedia = async (file, additionalData) => {
+    const imageRef = storageRef.child(`${auth.currentUser.uid}/${file.name}`);
 
-  // export const getUserPosts = async (user, additionalData) => {
-  //   if(!userAuth) return;
+    try {
+      imageRef.put(file)
+          .then( () => {
+            console.log("Uploaded successfully!");
+          });
+    } catch (err) {
+      alert('Upload canceled');
+      console.log(err);
+    }
+  };
 
-
-  // };
 
   export const actionCodeSettings = {
     url: 'http://localhost:3000/'

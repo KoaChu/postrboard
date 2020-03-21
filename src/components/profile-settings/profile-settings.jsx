@@ -55,7 +55,11 @@ class ProfileSettings extends Component {
 	            		alt='PROFILE' 
 	            		className='profile-image'/>
 	            	</div>
-					<input type='file' id='profile-image-input' className='hidden-input' onChange={this.handleImageChange} />
+					<input type='file' 
+							id='profile-image-input' 
+							className='hidden-input' 
+							onChange={this.handleImageChange}
+							accept='video/*,image/*' />
 					<CustomButton type='button' 
 					onClick={() => {
 						document.getElementById('profile-image-input').click();
