@@ -55,7 +55,7 @@ class UploadModal extends Component {
 				          		 id='upload-input' 
 				          		 className='hidden-input' 
 				          		 accept='video/*,image/*' 
-				          		 onClick={this.handleUploadPreview} />
+				          		 onInput={this.handleUploadPreview} />
 				         <Popup trigger={<Icon className='upload-icon' 
 								          		width='1em' 
 								          		height='1em' 
