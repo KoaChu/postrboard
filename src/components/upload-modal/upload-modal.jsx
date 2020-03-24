@@ -20,6 +20,7 @@ class UploadModal extends Component {
         	mediaUrl: '',
         	filePreview: '',
         	file: '',
+        	buttonVis: 'upload-icon',
         }
     }
 
@@ -56,11 +57,14 @@ class UploadModal extends Component {
 				          		 className='hidden-input' 
 				          		 accept='video/*,image/*' 
 				          		 onInput={this.handleUploadPreview} />
-				         <Popup trigger={<Icon className='upload-icon' 
+				         <Popup trigger={<Icon className={this.state.buttonVis} 
 								          		width='1em' 
 								          		height='1em' 
 								          		onClick={() => {
 								          			document.getElementById('upload-input').click();
+								          			this.setState({
+								          				buttonVis: 'button-fade'
+								          			});
 								          		}}/>}
 								  position='top center'
 								  on='hover'
@@ -89,7 +93,9 @@ class UploadModal extends Component {
 			          <CustomButton
 			          	className='cancel-button'
 			            onClick={() => {
-			              console.log("modal closed ");
+			              this.setState({
+			              	filePreview: ''
+			              });
 			              close();
 			            }}
 			          >

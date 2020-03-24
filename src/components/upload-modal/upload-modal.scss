@@ -50,6 +50,7 @@
   margin: auto;
   width: 50%;
   height: 20%;
+  z-index: 2;
 }
 .modal .content-text-wrapper {
   border: 2px solid #ccc;
@@ -135,6 +136,24 @@
       border: none;
     }
   }
+}
+
+.image-preview {
+  width: 45%;
+  height: 52%;
+  position: absolute;
+  user-select: none;
+  margin: -0.6em 0em;
+}
+
+.button-fade {
+  display: block;
+  margin: auto;
+  width: 50%;
+  height: 20%;
+  z-index: 2;
+  visibility: hidden;
+  transition: visibility 0.8s;
 }
 
 
