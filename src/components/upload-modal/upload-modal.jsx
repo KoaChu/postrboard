@@ -60,7 +60,8 @@ class UploadModal extends Component {
 				          		 id='upload-input' 
 				          		 className='hidden-input' 
 				          		 accept='video/*,image/*' 
-				          		 onInput={this.handleUploadPreview} />
+				          		 onInput={this.handleUploadPreview} 
+				          		 required />
 				         <Popup trigger={<Icon className={this.state.buttonVis} 
 								          		width='1em' 
 								          		height='1em' 
@@ -78,7 +79,7 @@ class UploadModal extends Component {
 				          <img src={this.state.filePreview} alt='' className='image-preview'/>
 				        </div>
 				        <div className='content-text-wrapper'>
-				        	<textarea className='content-text' type='text' placeholder='Write a description...' />
+				        	<textarea className='content-text' id='post-description' type='text' placeholder='Write a description...' required />
 				        </div>
 			        </div>
 			        <div className="actions">
@@ -86,14 +87,16 @@ class UploadModal extends Component {
             			onClick={() => {
             				if(this.state.file !== '') {
             					uploadUserMedia(this.state.file);
-            					this.state.getDownloadUrl()
+            					this.state.imageRef.getDownloadURL()
             								.then( (url) => {
+            									console.log(url);
             									this.setState({
             										mediaUrl: url,
             									});
+            									console.log(this.state.mediaUrl);
             								});
             				}
-            				setUserPosts(this.state.mediaUrl, TEXT, this.state.fileName)
+            				setUserPosts(this.state.mediaUrl, document.getElementById('post-description').value, this.state.fileName);
             				console.log('posted');
             				close();
             			}}
