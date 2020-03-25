@@ -80,10 +80,23 @@ const config = {
     return profileImage;
   };
 
-  export const setUserPosts = async (userAuth, mediaUrl, text, postTitle) => {
-    if(!userAuth) return;
-    
-    const userRef = firestore.doc(`users/${userAuth.uid}`);
+  export const setUserPosts = async (mediaUrl, text, fileName) => {
+
+    const userPostsRef = firestore.doc(`users/${auth.currentUser.uid}/posts/${fileName}`);
+    const createdAt = new Date();
+
+    try {
+        await userPostsRef.set({
+          mediaUrl,
+          text,
+          likes: 0,
+          notes: 0,
+          createdAt,
+        })
+      } catch (error) {
+        console.log('error updating user post ref', error.message);
+      }
+
   };
 
   export const uploadUserMedia = async (file, additionalData) => {

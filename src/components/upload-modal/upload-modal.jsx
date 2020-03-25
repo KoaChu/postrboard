@@ -6,7 +6,7 @@ import { ReactComponent as Icon } from '../../assets/uploadv2.svg';
 
 import CustomButton from '../custom-button/custom-button';
 
-import { uploadUserMedia } from '../../firebase/firebase-utils';
+import { uploadUserMedia, setUserPosts, storageRef, auth } from '../../firebase/firebase-utils';
 
 import './upload-modal.scss';
 
@@ -17,10 +17,12 @@ class UploadModal extends Component {
         super(props);
 
         this.state = {
-        	mediaUrl: '',
+        	mediaUrl: 'none',
         	filePreview: '',
         	file: '',
+        	fileName: '',
         	buttonVis: 'upload-icon',
+        	imageRef: ''
         }
     }
 
@@ -33,7 +35,9 @@ class UploadModal extends Component {
     	reader.onloadend = () => {
     		this.setState({
     			file: file,
-    			filePreview: reader.result
+    			filePreview: reader.result,
+    			fileName: file.name,
+    			imageRef: storageRef.child(`${auth.currentUser.uid}/${file.name}`)
     		});
     	}
     	reader.readAsDataURL(file);
@@ -78,23 +82,32 @@ class UploadModal extends Component {
 				        </div>
 			        </div>
 			        <div className="actions">
-			          <Popup
-			            trigger={<CustomButton> Post </CustomButton>}
-			            position="top center"
-			            closeOnDocumentClick
-			          >
-			            <span>
-			              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae
-			              magni omnis delectus nemo, maxime molestiae dolorem numquam
-			              mollitia, voluptate ea, accusamus excepturi deleniti ratione
-			              sapiente! Laudantium, aperiam doloribus. Odit, aut.
-			            </span>
-			          </Popup>
+			          <CustomButton
+            			onClick={() => {
+            				if(this.state.file !== '') {
+            					uploadUserMedia(this.state.file);
+            					this.state.getDownloadUrl()
+            								.then( (url) => {
+            									this.setState({
+            										mediaUrl: url,
+            									});
+            								});
+            				}
+            				setUserPosts(this.state.mediaUrl, TEXT, this.state.fileName)
+            				console.log('posted');
+            				close();
+            			}}
+            			> Post 
+			          </CustomButton>
 			          <CustomButton
 			          	className='cancel-button'
 			            onClick={() => {
 			              this.setState({
-			              	filePreview: ''
+			              	file: '',
+			              	filePreview: '',
+			              	fileName: '',
+			              	buttonVis: 'upload-icon',
+			              	imageRef: ''
 			              });
 			              close();
 			            }}
@@ -110,7 +123,8 @@ class UploadModal extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-	uploadUserMedia: () => dispatch(uploadUserMedia())
+	uploadUserMedia: () => dispatch(uploadUserMedia()),
+	setUserPosts: () => dispatch(setUserPosts())
 });
 
 export default connect(null, mapDispatchToProps)(UploadModal);
