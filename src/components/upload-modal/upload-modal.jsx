@@ -48,7 +48,7 @@ class UploadModal extends Component {
             <Popup className='pop-up' trigger={<button className="open-button" id='modal-button'></button>} modal>
 			    {close => (
 			      <div className="modal">
-			        <a className="close" onClick={close} href='/myboard'>
+			        <a className="close" onClick={close} href='#'>
 			          &times;
 			        </a>
 			        <div className='modal-header'>
@@ -86,17 +86,11 @@ class UploadModal extends Component {
 			          <CustomButton
             			onClick={() => {
             				if(this.state.file !== '') {
-            					uploadUserMedia(this.state.file);
-            					this.state.imageRef.getDownloadURL()
-            								.then( (url) => {
-            									console.log(url);
-            									this.setState({
-            										mediaUrl: url,
-            									});
-            									console.log(this.state.mediaUrl);
-            								});
+            					uploadUserMedia(this.state.file, document.getElementById('post-description').value, this.state.fileName);
+            				} else {
+            					alert('Please upload a media file.');
+            					return;
             				}
-            				setUserPosts(this.state.mediaUrl, document.getElementById('post-description').value, this.state.fileName);
             				console.log('posted');
             				close();
             			}}

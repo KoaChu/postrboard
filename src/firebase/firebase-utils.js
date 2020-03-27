@@ -99,18 +99,54 @@ const config = {
 
   };
 
-  export const uploadUserMedia = async (file, additionalData) => {
-    const imageRef = storageRef.child(`${auth.currentUser.uid}/${file.name}`);
+  export const uploadUserMedia = async (file, text, fileName) => {
 
-    try {
-      imageRef.put(file)
-          .then( () => {
-            console.log("Uploaded successfully!");
-          });
-    } catch (err) {
-      alert('Upload canceled');
-      console.log(err);
-    }
+    var mediaUploadTask = storageRef.child(`${auth.currentUser.uid}/${file.name}`).put(file);
+
+    const userPostsRef = firestore.doc(`users/${auth.currentUser.uid}/posts/${fileName}`);
+    const createdAt = new Date();
+
+    mediaUploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
+      (snapshot) => {
+        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+
+        console.log('Upload is ' + progress + '% done');
+        switch (snapshot.state) {
+          case firebase.storage.TaskState.PAUSED: // or 'paused'
+            console.log('Upload is paused');
+            break;
+          case firebase.storage.TaskState.RUNNING: // or 'running'
+            console.log('Upload is running');
+            break;
+        }
+      }, function(error) {
+            switch (error.code) {
+              case 'storage/unauthorized':
+                console.log('User doesn\'t have permission to access the object');
+                break;
+              case 'storage/canceled':
+                console.log('User canceled the upload');
+                break;
+              case 'storage/unknown':
+                console.log('Unknown error occurred, inspect error.serverResponse');
+                break;
+            }
+          }, () => {
+                mediaUploadTask.snapshot.ref.getDownloadURL().then(function(mediaURL) {
+                  try {
+                      userPostsRef.set({
+                        mediaURL,
+                        text,
+                        likes: 0,
+                        notes: 0,
+                        createdAt,
+                      })
+                    } catch (error) {
+                      console.log('error updating user post ref', error.message);
+                    }
+                });
+              });
+    return createdAt;
   };
 
 
