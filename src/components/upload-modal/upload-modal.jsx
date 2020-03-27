@@ -87,6 +87,13 @@ class UploadModal extends Component {
             			onClick={() => {
             				if(this.state.file !== '') {
             					uploadUserMedia(this.state.file, document.getElementById('post-description').value, this.state.fileName);
+            					this.setState({
+					              	file: '',
+					              	filePreview: '',
+					              	fileName: '',
+					              	buttonVis: 'upload-icon',
+					              	imageRef: ''
+					              });
             				} else {
             					alert('Please upload a media file.');
             					return;
