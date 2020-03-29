@@ -118,8 +118,10 @@ const config = {
           case firebase.storage.TaskState.RUNNING: // or 'running'
             console.log('Upload is running');
             break;
+          default:
+            break;
         }
-      }, function(error) {
+      }, (error) => {
             switch (error.code) {
               case 'storage/unauthorized':
                 console.log('User doesn\'t have permission to access the object');
@@ -129,6 +131,8 @@ const config = {
                 break;
               case 'storage/unknown':
                 console.log('Unknown error occurred, inspect error.serverResponse');
+                break;
+              default:
                 break;
             }
           }, () => {
