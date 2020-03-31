@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { auth, firestore } from '../../firebase/firebase-utils';
 
 import './myboardpage.scss';
@@ -7,13 +7,14 @@ import ImageGallery from '../../components/image-gallery/image-gallery';
 
 const MyBoardPage = () => {
 	const [images, setImages] = useState([]);
+	const [count, setCount] = useState(0);
 
     const userDocRef = firestore.collection(`users/${auth.currentUser.uid}/posts`);
 
-    const getImages = () => { 	
+    const getImages = (count=5) => { 	
 	    var userImages = userDocRef
 	    				.orderBy('createdAt')
-	    				.limit(2)
+	    				.limit(count)
 	    				.get()
 	    				.then((snapShot) => {
 	    					snapShot.forEach((doc) => {
@@ -28,9 +29,17 @@ const MyBoardPage = () => {
 	    				});
 	    return;
     };
+    
+    React.useEffect(() => {
+    	getImages();
+    }, []);
 
     return (
         <div className='myboardpage'>
+        	<h3>{count}</h3>
+        	<button onClick={() => {
+        		setCount(count + 1);
+        	}}>click here</button>
         	<ImageGallery disabled={false} images={images} />
         </div>
     );

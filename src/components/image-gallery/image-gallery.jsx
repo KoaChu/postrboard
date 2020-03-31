@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { render } from "react-dom";
 import Gallery from "react-photo-gallery";
 import Photo from "./photo";
 import arrayMove from "array-move";
@@ -8,7 +7,7 @@ import { photos } from "./photos";
 import './image-gallery.scss';
 
 
-const ImageGallery = ({ disabled }) => {
+const ImageGallery = ({ disabled, images }) => {
 
 	const SortablePhoto = SortableElement(item => <Photo {...item} />);
 	const SortableGallery = SortableContainer(({ items }) => (
