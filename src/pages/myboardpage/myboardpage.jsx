@@ -36,10 +36,10 @@ const MyBoardPage = () => {
 
     return (
         <div className='myboardpage'>
-        	<h3>{count}</h3>
-        	<button onClick={() => {
-        		setCount(count + 1);
-        	}}>click here</button>
+        	{/*<h3>{count}</h3>
+        	        	<button onClick={() => {
+        	        		setCount(count + 1);
+        	        	}}>click here</button>*/}
         	<ImageGallery disabled={false} images={images} />
         </div>
     );

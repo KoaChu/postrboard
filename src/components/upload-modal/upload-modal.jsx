@@ -22,7 +22,10 @@ class UploadModal extends Component {
         	file: '',
         	fileName: '',
         	buttonVis: 'upload-icon',
-        	imageRef: ''
+        	imageRef: '',
+        	height: '',
+        	width: '',
+        	value: ''
         }
     }
 
@@ -43,6 +46,46 @@ class UploadModal extends Component {
     	reader.readAsDataURL(file);
     };
 
+    handleSize = (event) => {
+    	event.preventDefault();
+    	var value = event.target.value;
+    	console.log(value);
+
+    	switch (event.target.value) {
+    		case '0':
+    			this.setState({
+    				height: '4',
+    				width: '3'
+    			});
+    			console.log('tall');
+    			break;
+    		case '1':
+    			this.setState({
+    				height: '1',
+    				width: '1'
+    			});
+    			console.log('square');
+    			break;
+    		case '2':
+    			this.setState({
+    				height: '3',
+    				width: '4'
+    			});
+    			console.log('wide');
+    			break;
+    		case '3':
+    			this.setState({
+    				height: '1',
+    				width: '5'
+    			});
+    			console.log('panorama');
+    			break;
+    		default:
+    			console.log('nothing');
+    			break;
+    	}
+    };
+
     render() {
         return (
             <Popup className='pop-up' trigger={<button className="open-button" id='modal-button'></button>} modal>
@@ -53,6 +96,15 @@ class UploadModal extends Component {
 			        </a>
 			        <div className='modal-header'>
 			        	<h3>New Post</h3>
+			        	<div className='select-wrapper'>
+			        		<select className='option-select' placeholder='Size' onChange={this.handleSize}>
+			        			<option value='' disabled selected hidden>Choose a size ↓</option>
+			        			<option value='0'>Tall</option>
+			        			<option value='1'>Square</option>
+			        			<option value='2'>Wide</option>
+			        			<option value='3'>Panorama</option>
+			        		</select>
+			        	</div>
 			        </div>
 			        <div className="content-wrapper">
 				        <div className="content">
@@ -85,7 +137,7 @@ class UploadModal extends Component {
 			        <div className="actions">
 			          <CustomButton
             			onClick={() => {
-            				if(this.state.file !== '') {
+            				if((this.state.file !== '')&&(this.state.width !== '')&&(this.state.height !== '')) {
             					uploadUserMedia(this.state.file, document.getElementById('post-description').value, this.state.fileName);
             					this.setState({
 					              	file: '',
@@ -95,7 +147,7 @@ class UploadModal extends Component {
 					              	imageRef: ''
 					              });
             				} else {
-            					alert('Please upload a media file.');
+            					alert('Please upload a media file and/or select a size.');
             					return;
             				}
             				console.log('posted');
