@@ -2,11 +2,12 @@ import React from 'react';
 
 import './homepage.scss';
 
+import ImageGallery from '../../components/image-gallery/image-gallery';
+
 
 const HomePage = () => (
 <div className='homepage'>
-	<h1>HOMEPAGE</h1>
-	<h2>homepage</h2>
+	<ImageGallery disabled={true} />
 </div>
 	);
 

@@ -8,11 +8,11 @@ import { photos } from "./photos";
 import './image-gallery.scss';
 
 
-const ImageGallery = () => {
+const ImageGallery = ({ disabled }) => {
 
 	const SortablePhoto = SortableElement(item => <Photo {...item} />);
 	const SortableGallery = SortableContainer(({ items }) => (
-	  <Gallery photos={items} renderImage={props => <SortablePhoto {...props} margin={2}/>} />
+	  <Gallery photos={items} renderImage={props => <SortablePhoto {...props} margin={2} disabled={disabled} />} />
 	));
 
 	const [items, setItems] = useState(photos);

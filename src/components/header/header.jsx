@@ -22,7 +22,7 @@ const Header = ({ currentUser, hidden }) => {
                 <Link className='logo-container' to="/">
                     LOGO
                 </Link>
-                <CurrentAccount />
+                {/*<CurrentAccount />*/}
                 <div className='options-container'>
                     <Link className='option' to='/featured'>
                         Featured
