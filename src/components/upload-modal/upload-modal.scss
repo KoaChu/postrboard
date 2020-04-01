@@ -84,14 +84,21 @@
   cursor: pointer;
   position: absolute;
   display: block;
-  padding: 2px 5px;
-  line-height: 20px;
+  color: white;
+  padding: 5px;
+  padding-top: 0;
+  line-height: 0.7em;
   right: -10px;
   top: -10px;
   font-size: 24px;
-  background: #ffffff;
+  background: maroon;
   border-radius: 18px;
-  border: 1px solid #cfcece;
+  border: 2px solid black;
+
+  &:hover {
+    background: white;
+    color: maroon;
+  }
 }
 
 .open-button {
@@ -190,6 +197,7 @@ select.option-select {
   &:hover {
     background-color: white;
     color: black;
+    cursor: pointer;
   }
 }
 select {

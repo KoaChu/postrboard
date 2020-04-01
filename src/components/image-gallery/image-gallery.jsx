@@ -22,6 +22,7 @@ const ImageGallery = ({ disabled, images }) => {
 
     return (
         <div className='image-gallery'>
+        	<h3>{images[0]}</h3>
         	<SortableGallery items={items} onSortEnd={onSortEnd} axis={"xy"} />
         </div>
     );

@@ -99,7 +99,7 @@ const config = {
 
   };
 
-  export const uploadUserMedia = async (file, text, fileName) => {
+  export const uploadUserMedia = async (file, text, fileName, height, width) => {
 
     var mediaUploadTask = storageRef.child(`${auth.currentUser.uid}/${file.name}`).put(file);
 
@@ -144,6 +144,8 @@ const config = {
                         likes: 0,
                         notes: 0,
                         createdAt,
+                        height,
+                        width,
                       })
                     } catch (error) {
                       console.log('error updating user post ref', error.message);
