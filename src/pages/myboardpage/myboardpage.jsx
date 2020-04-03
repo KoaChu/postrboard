@@ -69,14 +69,18 @@ class MyBoardPage extends Component {
     constructor(props) {
         super(props);
 
+
         this.state = {
         	images: [],
-        	count: 0
+        	// count: 0,
+        	// i: 0
         };
+        // this.getImages();
     }
 
     componentDidMount() {
     	this.getImages();
+    	// console.log(Date.now() + " component did mount: " + JSON.stringify(this.state.images));
     }
 
 
@@ -96,23 +100,23 @@ class MyBoardPage extends Component {
 	    						var newImage = { src: src, height: height, width: width };
 	    						this.setState({
 	    							images: [...this.state.images, newImage],
+	    							i: this.state.i + 1
 	    						});
 	    						// setImages([...images, newImage]);
-	    						console.log(this.state.images);
+	    						// console.log(Date.now() + " in getImages function: " + JSON.stringify(this.state.images));
 	    					});
 	    				})
 	    				.catch((err) => {
 	    					console.log(err);
 	    				});
-	    				console.log('getImages ran --myboardpage: 107');
+	    				// console.log('getImages ran --myboardpage: 107');
 	    return;
     };
 
     render() {
+    	// console.log(Date.now() + " in render: " + JSON.stringify(this.state.images));
         return (
-            <div className='myboardpage'>
-	        	{/*<h3>{count}</h3>
-	        	        	<button onClick={() => {this.state.increment()}}>click here</button>*/}
+            <div className='myboardpage'> 
 	        	<ImageGallery disabled={false} images={this.state.images} />
         	</div>
         );
