@@ -21,16 +21,19 @@ const ImageGallery = ({ disabled, images }) => {
 
 	useEffect(() => {
 		setItems(images);
-		console.log("USE EFFECT CALLED" + JSON.stringify(items));
+		// console.log("USE EFFECT CALLED" + JSON.stringify(items));
 	},[images]);
-
-	// useCallback(() => {
-	// 	setItems(images);
-	// },[items]);
 
     const onSortEnd = ({ oldIndex, newIndex }) => {
       setItems(arrayMove(items, oldIndex, newIndex));
-      console.log(newIndex);
+      if(newIndex===oldIndex) {
+      	for(let i=0; i<3; i++) {
+      		console.log('PIC: ' + items[i].src + '\n' + 'DB Index: ' + items[i].index + '\n' + 'IG Index: ' + items[i].oldIndex);
+      	}
+      	return;
+      }
+      console.log('old index: ' + oldIndex + items[oldIndex].src);
+      console.log('new index: ' + newIndex + items[newIndex].src);
     };
 
     return (
@@ -42,35 +45,3 @@ const ImageGallery = ({ disabled, images }) => {
 
 export default ImageGallery;
 
-
-
-
-// class ImageGallery extends React.Component {
-
-//     constructor(props) {
-//         super(props);
-
-//         this.state = {
-//         	items: photos
-//         }
-//     }
-
-//     // onSortEnd = ({oldIndex, newIndex}) => {
-//     //   this.setState({items:arrayMove(items, oldIndex, newIndex)});
-//     // };
-
-//     render() {
-//     	const SortablePhoto = SortableElement(item => <Photo {...item} />);
-// 		const SortableGallery = SortableContainer(({ items }) => (
-// 	 	 <Gallery photos={items} renderImage={props => <SortablePhoto {...props} margin={2} disabled={this.props.disabled} />} />
-// 			));
-//         return (
-//             <div className='image-gallery'>
-//             	<h3>{this.props.images ? this.props.images[0].src : 'NULL'}</h3>
-//         		<SortableGallery items={this.state.items} onSortEnd={this.onSortEnd} axis={"xy"} />
-//         	</div>
-//         );
-//     }
-// }
-
-// export default ImageGallery;
