@@ -1,5 +1,4 @@
-.pop-up {
-}
+
 .hidden-input {
   display: none;
 }
@@ -155,12 +154,16 @@
 
 .button-fade {
   display: block;
+  position: relative;
+  cursor: pointer;
   margin: auto;
   width: 50%;
   height: 20%;
   z-index: 2;
-  visibility: hidden;
-  transition: visibility 0.8s;
+  // visibility: hidden;
+  transform: scale(0.6) translate(150%, 360%);
+  opacity: 50%;
+  transition: transform 0.8s, opacity 1s;
 }
 
 .select-wrapper {
@@ -207,6 +210,11 @@ select {
 option {
   background-color: black;
   color: white;
+}
+
+.upload-popup {
+  width: 0.5vw !important;
+  height: 0.5vw !important;
 }
 
 

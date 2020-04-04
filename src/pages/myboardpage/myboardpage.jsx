@@ -88,7 +88,7 @@ class MyBoardPage extends Component {
     	const userDocRef = firestore.collection(`users/${auth.currentUser.uid}/posts`);
 
 	    var userImages = userDocRef
-	    				.orderBy('createdAt')
+	    				.orderBy('index', 'desc')
 	    				.limit(count)
 	    				.get()
 	    				.then((snapShot) => {
@@ -97,10 +97,10 @@ class MyBoardPage extends Component {
 	    						var src = data.mediaURL;
 	    						var height = data.height;
 	    						var width = data.width;
-	    						var newImage = { src: src, height: height, width: width };
+	    						var index = data.index;
+	    						var newImage = { src: src, height: height, width: width, index: index };
 	    						this.setState({
 	    							images: [...this.state.images, newImage],
-	    							i: this.state.i + 1
 	    						});
 	    						// setImages([...images, newImage]);
 	    						// console.log(Date.now() + " in getImages function: " + JSON.stringify(this.state.images));

@@ -30,6 +30,7 @@ const ImageGallery = ({ disabled, images }) => {
 
     const onSortEnd = ({ oldIndex, newIndex }) => {
       setItems(arrayMove(items, oldIndex, newIndex));
+      console.log(newIndex);
     };
 
     return (

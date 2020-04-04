@@ -29,6 +29,7 @@ class UploadModal extends Component {
         }
     }
 
+
     handleUploadPreview = (event) => {
     	event.preventDefault();
 
@@ -40,10 +41,12 @@ class UploadModal extends Component {
     			file: file,
     			filePreview: reader.result,
     			fileName: file.name,
-    			imageRef: storageRef.child(`${auth.currentUser.uid}/${file.name}`)
+    			imageRef: storageRef.child(`${auth.currentUser.uid}/${file.name}`),
+                buttonVis: 'button-fade'
     		});
     	}
     	reader.readAsDataURL(file);
+
     };
 
     handleSize = (event) => {
@@ -95,7 +98,9 @@ class UploadModal extends Component {
             <Popup className='pop-up' trigger={<button className="open-button" id='modal-button'></button>} modal>
 			    {close => (
 			      <div className="modal">
-			        <a className="close" onClick={close} href='#'>
+			        <a className="close" 
+                        onClick={close}
+                        href='#'>
 			          &#10799;
 			        </a>
 			        <div className='modal-header'>
@@ -123,13 +128,11 @@ class UploadModal extends Component {
 								          		height='1em' 
 								          		onClick={() => {
 								          			document.getElementById('upload-input').click();
-								          			this.setState({
-								          				buttonVis: 'button-fade'
-								          			});
+								          			
 								          		}}/>}
 								  position='top center'
 								  on='hover'
-								  className='upload-popup'>
+                                  className='upload-popup'>
 					      	Upload an image or video
 				          </Popup>
 				          <img src={this.state.filePreview} alt='' className='image-preview'/>
