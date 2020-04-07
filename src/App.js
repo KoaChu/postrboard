@@ -20,7 +20,6 @@ import FollowingPage from './pages/followingpage/followingpage';
 import FollowersPage from './pages/followerspage/followerspage';
 
 
-
 class App extends Component {
 
   unsubscribeFromAuth = null;
@@ -32,9 +31,14 @@ class App extends Component {
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
       if(userAuth) {
         const userRef = await createUserProfileDocument(userAuth);
-        console.log(userAuth.uid);
+        // console.log(userAuth.uid);
 
         userRef.onSnapshot(snapShot => {
+          const localUserStore = {
+            id:snapShot.id,
+            ...snapShot.data()
+          };
+          localStorage.setItem('currentUser', JSON.stringify(localUserStore));
           setCurrentUser({
               id:snapShot.id,
               ...snapShot.data()
@@ -42,29 +46,30 @@ class App extends Component {
         });
       } else {
         setCurrentUser(userAuth);
+        localStorage.removeItem('currentUser');
       }
-    })
+    });
   }
 
   componentWillUnmount() {
     this.unsubscribeFromAuth();
   }
 
+
     render() {
         return (
             <div>
               <Header />
               <Switch>
-                <Route exact path='/' render={() => this.props.currentUser ? (<HomePage />) : (<Redirect to='/signin' />)} />
-                <Route exact path='/signin' render={() => this.props.currentUser ? (<Redirect to='/' />) : (<SignInPage />)} />
-                <Route exact path='/settings' render={() => this.props.currentUser ? (<SettingsPage />) : (<Redirect to='/signin' />)} />
-                <Route exact path='/search' render={() => this.props.currentUser ? (<SearchPage />) : (<Redirect to='/signin' />)} />
-                <Route exact path='/featured' render={() => this.props.currentUser ? (<FeaturedPage />) : (<Redirect to='/signin' />)} />
-                <Route exact path='/following' render={() => this.props.currentUser ? (<FollowingPage />) : (<Redirect to='/signin' />)} />
-                <Route exact path='/followers' render={() => this.props.currentUser ? (<FollowersPage />) : (<Redirect to='/signin' />)} />
-                <Route exact path='/myboard' render={() => this.props.currentUser ? (<MyBoardPage />) : (<Redirect to='/signin' />)} />
-                <Route exact path='/notes' render={() => this.props.currentUser ? (<NotesPage />) : (<Redirect to='/signin' />)} />
-
+                <Route exact path='/signin' render={() => localStorage.getItem('currentUser') ? (<Redirect to='/' />) : (<SignInPage />)} />
+                <Route exact path='/' render={() => localStorage.getItem('currentUser') ? (<HomePage />) : (<Redirect to='/signin' />)} />
+                <Route exact path='/settings' render={() => localStorage.getItem('currentUser') ? (<SettingsPage />) : (<Redirect to='/signin' />)} />
+                <Route exact path='/search' render={() => localStorage.getItem('currentUser') ? (<SearchPage />) : (<Redirect to='/signin' />)} />
+                <Route exact path='/featured' render={() => localStorage.getItem('currentUser') ? (<FeaturedPage />) : (<Redirect to='/signin' />)} />
+                <Route exact path='/following' render={() => localStorage.getItem('currentUser') ? (<FollowingPage />) : (<Redirect to='/signin' />)} />
+                <Route exact path='/followers' render={() => localStorage.getItem('currentUser') ? (<FollowersPage />) : (<Redirect to='/signin' />)} />
+                <Route exact path='/myboard' render={() => localStorage.getItem('currentUser') ? (<MyBoardPage />) : (<Redirect to='/signin' />)} />
+                <Route exact path='/notes' render={() => localStorage.getItem('currentUser') ? (<NotesPage />) : (<Redirect to='/signin' />)} />
               </Switch>
            </div>
         );

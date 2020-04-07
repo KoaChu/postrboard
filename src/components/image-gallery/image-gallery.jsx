@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import Gallery from "react-photo-gallery";
 import Photo from "./photo";
 import arrayMove from "array-move";
@@ -37,14 +37,10 @@ const ImageGallery = ({ disabled, images }) => {
       } else if(newIndex < oldIndex) {
         //need to push all indexes < AND = NEW DB INDEX DOWN and keep any with an index < old DB index
         updatePushDown(oldDBIndex, newDBIndex);
-
-      	// console.log('new db index: ' + newDBIndex + '\n' + 'starting db index: ' + oldDBIndex);
       	return;
       }	else if(newIndex > oldIndex) {
         //need to push all indexes > AND = NEW DB INDEX UP and keep any with an index > old DB index
         updatePushUp(oldDBIndex, newDBIndex);
-        
-      	// console.log('new db index: ' + newDBIndex + '\n' + 'starting db index: ' + oldDBIndex);
    		return;
       } else {
       	return;

@@ -93,7 +93,17 @@ class UploadModal extends Component {
     	}
     };
 
+
     render() {
+
+        const ToolTip = ({ content }) => {
+            return(
+                <div className='tooltip'>
+                    {content}
+                </div>
+            )
+        };
+
         return (
             <Popup className='pop-up' trigger={<button className="open-button" id='modal-button'></button>} modal>
 			    {close => (
@@ -133,7 +143,7 @@ class UploadModal extends Component {
 								  position='top center'
 								  on='hover'
                                   className='upload-popup'>
-					      	Upload an image or video
+					      	Upload a file
 				          </Popup>
 				          <img src={this.state.filePreview} alt='' className='image-preview'/>
 				        </div>

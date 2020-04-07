@@ -23,6 +23,7 @@ const ProfileDropdown = ({ history, dispatch }) => (
 			<Link className='item' to='/settings' onClick={() => { dispatch(toggleProfileHidden()) }}>Settings</Link>
 			<CustomButton onClick={() => {
 			auth.signOut();
+        	localStorage.removeItem('currentUser');
 			dispatch(toggleProfileHidden());
 			}}>
 			Sign Out

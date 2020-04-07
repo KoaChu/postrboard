@@ -17,7 +17,7 @@ import './header.scss';
 
 const Header = ({ currentUser, hidden }) => {
     return (
-        currentUser ?
+        localStorage.getItem('currentUser') ?
             (<div className='header'>
                 <Link className='logo-container' to="/">
                     LOGO
