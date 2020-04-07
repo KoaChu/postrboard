@@ -12,6 +12,7 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
 
   const handleClick = event => {
     onClick(event, { photo, index });
+    console.log(index);
   };
 
   return (

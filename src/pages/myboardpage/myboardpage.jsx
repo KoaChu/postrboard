@@ -88,7 +88,7 @@ class MyBoardPage extends Component {
     	const userDocRef = firestore.collection(`users/${auth.currentUser.uid}/posts`);
 
 	    var userImages = userDocRef
-	    				.orderBy('index', 'desc')
+	    				.orderBy('index')
 	    				.limit(count)
 	    				.get()
 	    				.then((snapShot) => {

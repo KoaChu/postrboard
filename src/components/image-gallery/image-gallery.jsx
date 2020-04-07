@@ -24,21 +24,40 @@ const ImageGallery = ({ disabled, images }) => {
 		// console.log("USE EFFECT CALLED" + JSON.stringify(items));
 	},[images]);
 
+	const onSortStart = ({index}) => {
+		console.log('clicked-index: ' + index);
+	};
+
     const onSortEnd = ({ oldIndex, newIndex }) => {
       setItems(arrayMove(items, oldIndex, newIndex));
+
+      var newDBIndex = (items.length-1) - newIndex;
+      var oldDBIndex = (items.length-1) - oldIndex;
+
       if(newIndex===oldIndex) {
-      	for(let i=0; i<3; i++) {
-      		console.log('PIC: ' + items[i].src + '\n' + 'DB Index: ' + items[i].index + '\n' + 'IG Index: ' + items[i].oldIndex);
+      	for(let i=0; i<items.length; i++) {
+      		console.log('PIC: ' + items[i].src + '\n' + 'DB Index: ' + items[i].index + '\n' + 'IG Index: ' + oldIndex);
       	}
       	return;
+      } else if(newIndex < oldIndex) {
+        //need to push all indexes LOWER THAN NEW DB INDEX DOWN and keep any with an index < old DB index
+      	console.log('new db index: ' + newDBIndex + '\n' + 'starting db index: ' + oldDBIndex);
+      	return;
+      }	else if(newIndex > oldIndex) {
+        //need to push all indexes HIGHER THAN NEW DB INDEX UP and keep any with an index > old DB index
+      	console.log('new db index: ' + newDBIndex + '\n' + 'starting db index: ' + oldDBIndex);
+   		return;
+      } else {
+      	return;
       }
-      console.log('old index: ' + oldIndex + items[oldIndex].src);
-      console.log('new index: ' + newIndex + items[newIndex].src);
+      // var temp_names = items.map(i => "Item " + i.index);
+      // console.log('old index: ' + oldIndex + " - " + temp_names[oldIndex]);
+      // console.log('new index: ' + newIndex + " - " + temp_names[newIndex]);
     };
 
     return (
         <div className='image-gallery'>
-        	<SortableGallery items={items} onSortEnd={onSortEnd} axis={"xy"} />
+        	<SortableGallery items={items} disableAutoscroll={true} onSortEnd={onSortEnd} onSortStart={onSortStart} axis={"xy"} />
         </div>
     );
 };
