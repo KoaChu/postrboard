@@ -163,7 +163,7 @@ const config = {
                   var data = doc.data();
                   var index = data.index + 1;
 
-                  console.log(index);
+                  // console.log(index);
 
                   userPostsRef.set({
                     index,
@@ -176,6 +176,90 @@ const config = {
               
     return createdAt;
   };
+
+  export const updatePushDown = async (oldDBIndex, newDBIndex) => {
+    const userDocRef = firestore.collection(`users/${auth.currentUser.uid}/posts`);
+
+    userDocRef.where('index', '==', oldDBIndex)
+              .limit(1)
+              .get()
+              .then((snapshot) => {
+                snapshot.forEach((doc) => {     
+                  var refName = doc.id;
+                  var userPostRef = firestore.doc(`users/${auth.currentUser.uid}/posts/${refName}`);
+                  console.log(refName);
+
+                  userPostRef.update({
+                    index: newDBIndex
+                  });
+                });
+              })
+              .catch((err) => {
+                console.log(err.message);
+              });
+
+    userDocRef.where('index', '<=', newDBIndex).where('index', '>', oldDBIndex)
+              .get()
+              .then((snapshot) => {
+                snapshot.forEach((doc) => {
+                  var data = doc.data();
+                  var refName = doc.id;
+                  var currIndex = data.index;
+
+                  var userPostRef = firestore.doc(`users/${auth.currentUser.uid}/posts/${refName}`);
+
+                  userPostRef.update({
+                    index: currIndex - 1
+                  });
+                });
+              })
+              .catch((err) => {
+                console.log(err.message);
+              });
+
+  };
+
+  export const updatePushUp = async (oldDBIndex, newDBIndex) => {
+  const userDocRef = firestore.collection(`users/${auth.currentUser.uid}/posts`);
+
+  userDocRef.where('index', '==', oldDBIndex)
+            .limit(1)
+            .get()
+            .then((snapshot) => {
+              snapshot.forEach((doc) => {     
+                var refName = doc.id;
+                var userPostRef = firestore.doc(`users/${auth.currentUser.uid}/posts/${refName}`);
+                console.log(refName);
+
+                userPostRef.update({
+                  index: newDBIndex
+                });
+              });
+            })
+            .catch((err) => {
+              console.log(err.message);
+            });
+
+  userDocRef.where('index', '>=', newDBIndex).where('index', '<', oldDBIndex)
+            .get()
+            .then((snapshot) => {
+              snapshot.forEach((doc) => {
+                var data = doc.data();
+                var refName = doc.id;
+                var currIndex = data.index;
+
+                var userPostRef = firestore.doc(`users/${auth.currentUser.uid}/posts/${refName}`);
+
+                userPostRef.update({
+                  index: currIndex + 1
+                });
+              });
+            })
+            .catch((err) => {
+              console.log(err.message);
+            });
+
+};
 
 
   export const actionCodeSettings = {
