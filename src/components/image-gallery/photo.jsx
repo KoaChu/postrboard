@@ -15,11 +15,17 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
     console.log(index);
   };
 
+  const onMouseOver = event => {
+    console.log(event.target.getAttribute('src'));
+    // console.log(event.target);
+  };
+
   return (
     <img
       style={onClick ? { ...imgStyle, ...imgWithClick } : imgStyle}
       {...photo}
       onClick={onClick ? handleClick : null}
+      onMouseOver={onMouseOver}
       alt="img"
     />
   );

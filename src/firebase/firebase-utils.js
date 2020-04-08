@@ -103,8 +103,8 @@ const config = {
 
     var mediaUploadTask = storageRef.child(`${auth.currentUser.uid}/${file.name}`).put(file);
 
-    const userPostsRef = firestore.doc(`users/${auth.currentUser.uid}/posts/${fileName}`);
     const userDocRef = firestore.collection(`users/${auth.currentUser.uid}/posts`);
+    const userPostsRef = firestore.doc(`users/${auth.currentUser.uid}/posts/${fileName}`);
 
     const createdAt = new Date();
 
@@ -141,6 +141,7 @@ const config = {
                 mediaUploadTask.snapshot.ref.getDownloadURL().then(function(mediaURL) {
                   try {
                       userPostsRef.update({
+                        fileName,
                         mediaURL,
                         text,
                         likes: 0,
@@ -159,17 +160,23 @@ const config = {
               .limit(1)
               .get()
               .then((snapShot) => {
-                snapShot.forEach((doc) => {
-                  var data = doc.data();
-                  var index = data.index + 1;
-
-                  // console.log(index);
-
+                if(!snapShot) {
                   userPostsRef.set({
-                    index,
+                    index: 0,
                   })
-                });
-              })
+                } else {
+                    snapShot.forEach((doc) => {
+                    var data = doc.data();
+                    var index = data.index + 1;
+
+                    userPostsRef.set({
+                      index,
+                    });
+                  });
+                    
+                }
+              }
+              )
               .catch((err) => {
                 console.log(err);
               });

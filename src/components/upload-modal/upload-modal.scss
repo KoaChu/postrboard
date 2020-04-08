@@ -163,7 +163,9 @@
   // visibility: hidden;
   transform: scale(0.6) translate(150%, 360%);
   opacity: 50%;
-  transition: transform 0.8s, opacity 1s;
+  transition: transform 0.8s, opacity 0.9s;
+  // transition-delay: 0.9s;
+  // transition-timing-function: cubic-bezier(.17,.67,.83,.67)
 }
 
 .select-wrapper {
@@ -212,11 +214,31 @@ option {
   color: white;
 }
 
-.upload-popup {
-  width: 0.5vw !important;
-  height: 0.5vw !important;
+.instructions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  font-size: 1vw;
+  font-weight: bolder;
+  width: 20%;
+  height: 70%;
 }
 
+.instructions-hide {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  font-size: 1vw;
+  font-weight: bolder;
+  width: 20%;
+  height: 70%;
+  opacity: 0%;
+  user-select: none;
+  visibility: hidden;
+  // transition: opacity 1s;
+}
 
 
 

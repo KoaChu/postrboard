@@ -26,6 +26,7 @@ const ImageGallery = ({ disabled, images }) => {
 		// console.log("USE EFFECT CALLED" + JSON.stringify(items));
 	},[images]);
 
+
     const onSortEnd = ({ oldIndex, newIndex }) => {
       setItems(arrayMove(items, oldIndex, newIndex));
 
@@ -49,7 +50,7 @@ const ImageGallery = ({ disabled, images }) => {
 
     return (
         <div className='image-gallery'>
-        	<SortableGallery items={items} disableAutoscroll={true} onSortEnd={onSortEnd} axis={"xy"} />
+        	<SortableGallery items={items} disableAutoscroll={true} pressDelay={200} onSortEnd={onSortEnd} axis={"xy"} />
         </div>
     );
 };

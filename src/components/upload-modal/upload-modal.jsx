@@ -22,6 +22,7 @@ class UploadModal extends Component {
         	file: '',
         	fileName: '',
         	buttonVis: 'upload-icon',
+            instructionsVis: 'instructions',
         	imageRef: '',
         	height: 0,
         	width: 0,
@@ -42,7 +43,8 @@ class UploadModal extends Component {
     			filePreview: reader.result,
     			fileName: file.name,
     			imageRef: storageRef.child(`${auth.currentUser.uid}/${file.name}`),
-                buttonVis: 'button-fade'
+                buttonVis: 'button-fade',
+                instructionsVis: 'instructions-hide',
     		});
     	}
     	reader.readAsDataURL(file);
@@ -133,19 +135,15 @@ class UploadModal extends Component {
 				          		 accept='video/*,image/*' 
 				          		 onInput={this.handleUploadPreview} 
 				          		 required />
-				         <Popup trigger={<Icon className={this.state.buttonVis} 
-								          		width='1em' 
-								          		height='1em' 
-								          		onClick={() => {
-								          			document.getElementById('upload-input').click();
-								          			
-								          		}}/>}
-								  position='top center'
-								  on='hover'
-                                  className='upload-popup'>
-					      	Upload a file
-				          </Popup>
+				         <Icon className={this.state.buttonVis} 
+                                width='1em' 
+                                height='1em' 
+                                onClick={() => {
+                                    document.getElementById('upload-input').click();
+                                    
+                                }}/>
 				          <img src={this.state.filePreview} alt='' className='image-preview'/>
+                          <span className={this.state.instructionsVis}>Upload a video/image</span>
 				        </div>
 				        <div className='content-text-wrapper'>
 				        	<textarea className='content-text' id='post-description' type='text' placeholder='Write a description...' required />
@@ -165,6 +163,7 @@ class UploadModal extends Component {
 					              	filePreview: '',
 					              	fileName: '',
 					              	buttonVis: 'upload-icon',
+                                    instructionsVis: 'instructions',
 					              	imageRef: '',
 					              	height: 0,
 					              	width: 0
@@ -186,6 +185,7 @@ class UploadModal extends Component {
 			              	filePreview: '',
 			              	fileName: '',
 			              	buttonVis: 'upload-icon',
+                            instructionsVis: 'instructions',
 			              	imageRef: '',
 			              	height: 0,
 					        width: 0
