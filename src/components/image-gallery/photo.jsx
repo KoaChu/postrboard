@@ -1,5 +1,7 @@
 import React from "react";
 
+import './photo.scss';
+
 const imgWithClick = { cursor: "pointer" };
 
 const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
@@ -21,13 +23,18 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
   };
 
   return (
-    <img
-      style={onClick ? { ...imgStyle, ...imgWithClick } : imgStyle}
-      {...photo}
-      onClick={onClick ? handleClick : null}
-      onMouseOver={onMouseOver}
-      alt="img"
-    />
+    <div className='container'>
+      <img
+        style={onClick ? { ...imgStyle, ...imgWithClick } : imgStyle}
+        {...photo}
+        onClick={onClick ? handleClick : null}
+        onMouseOver={onMouseOver}
+        alt="img"
+      />
+      <div className='overlay'>
+        <div className='overlay-text'>TEST</div>
+      </div>
+    </div>
   );
 };
 

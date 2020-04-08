@@ -1,0 +1,24 @@
+.overlay .overlay-text {
+	position: absolute;
+	padding: 2vw;
+ 	top: 0;
+ 	bottom: 0;
+ 	left: 0;
+ 	right: 0;
+ 	height: 98%;
+ 	width: 100%;
+	opacity: 0;
+	text-align: center;
+	transition: .5s ease;
+	background-color: black;
+}
+
+.container:hover .overlay .overlay-text {
+	opacity: 0.7;
+	color: white;
+}
+
+.container {
+	position: relative;
+	width: inherit;
+}
