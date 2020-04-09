@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { createStructuredSelector } from 'reselect';
 // import { auth } from '../../firebase/firebase-utils';
 
-// import { ReactComponent as Logo } from '../../assets/crwn-logo.svg';                 <Logo className='logo' />
+// import { ReactComponent as Logo } from '../../assets/crwn-logo.svg';    <Logo className='logo' />
 import { selectCurrentUser } from '../../redux/user/user-selectors';
 import { selectProfileHidden } from '../../redux/profile/profile-selectors';
 

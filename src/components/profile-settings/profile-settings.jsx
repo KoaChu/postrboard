@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 // import FormInput from '../form-input/form-input';
 import CustomButton from '../custom-button/custom-button';
 
-import { selectUserImage, selectCurrentUser } from '../../redux/user/user-selectors';
+// import { selectUserImage, selectCurrentUser } from '../../redux/user/user-selectors';
 
 import './profile-settings.scss';
 
@@ -16,7 +16,7 @@ class ProfileSettings extends Component {
         super(props);
 
         this.state = {
-        	imageUrl: props.imageUrl
+        	imageUrl: JSON.parse(localStorage.getItem('currentUser')).imageUrl
         }
     }
 
@@ -40,13 +40,30 @@ class ProfileSettings extends Component {
 						});
 
 						userRef.update({imageUrl: url});
-						
+
+						userRef.get()
+								.then((snap) => {
+									const data = snap.data();
+									const newLocalUserStore = {
+										id: snap.id,
+										...snap.data()
+									};
+									localStorage.removeItem('currentUser');
+          							localStorage.setItem('currentUser', JSON.stringify(newLocalUserStore));
+								})
+								.catch((err) => {
+									console.log(err.message);
+								});
+
 						// const localUserStore = {
 						// 	...selectCurrentUser.data()
 						// };
 						// localStorage.removeItem('currentUser');
       //    				localStorage.setItem('currentUser', JSON.stringify(localUserStore));
 
+					})
+					.catch((err) => {
+						console.log(err.message);
 					});
 		} catch (err) {
 			alert('Upload canceled');
@@ -74,6 +91,7 @@ class ProfileSettings extends Component {
 					}}>
 					Change Profile Picture
 					</CustomButton>
+					<span className='refresh-span'>*refresh the page to update menu image</span>
 					<CustomButton type='submit'>Save</CustomButton>
 				</form>
 			</div>
@@ -81,9 +99,9 @@ class ProfileSettings extends Component {
     }
 }
 
-const mapStateToProps = createStructuredSelector({
-	imageUrl: selectUserImage
-});
+// const mapStateToProps = createStructuredSelector({
+// 	imageUrl: selectUserImage
+// });
 
-export default connect(mapStateToProps)(ProfileSettings);
+export default ProfileSettings;
 

@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 
 import './photo.scss';
 
 const imgWithClick = { cursor: "pointer" };
 
 const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
+
+  // const [imgText, setImgText] = useState('');
+
   const imgStyle = { margin: margin };
   if (direction === "column") {
     imgStyle.position = "absolute";
@@ -19,20 +22,22 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
 
   const onMouseOver = event => {
     console.log(event.target.getAttribute('src'));
-    // console.log(event.target);
+    // setImgText(event.target.getAttribute('src'));
   };
+
 
   return (
     <div className='container'>
       <img
         style={onClick ? { ...imgStyle, ...imgWithClick } : imgStyle}
         {...photo}
-        onClick={onClick ? handleClick : null}
+        // onClick={onClick ? handleClick : null}
         onMouseOver={onMouseOver}
         alt="img"
+        id='inside-img'
       />
       <div className='overlay'>
-        <div className='overlay-text'>TEST</div>
+        <div className='overlay-text'>TEXT</div>
       </div>
     </div>
   );

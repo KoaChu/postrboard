@@ -1,3 +1,7 @@
+img {
+	visibility: visible;
+}
+
 .overlay .overlay-text {
 	position: absolute;
 	font-size: 1vw;
@@ -13,9 +17,12 @@
 	text-align: center;
 	transition: .5s ease;
 	background-color: black;
+	user-select: none;
+	pointer-events: none;
+	visibility: visible;
 }
 
-.container:hover .overlay .overlay-text {
+img:hover .overlay .overlay-text {
 	opacity: 0.7;
 	color: white;
 }
@@ -27,9 +34,10 @@
 	margin-bottom: -8px;
 	user-select: none;
     overflow: hidden;
+    visibility: hidden;
 }
 
-.container:hover img {
+img:hover  {
 	transform: scale(1.1, 1);
     transition: transform 6s cubic-bezier(0.25, 0.45, 0.45, 0.95);
 }
