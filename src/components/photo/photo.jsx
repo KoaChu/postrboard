@@ -6,7 +6,7 @@ const imgWithClick = { cursor: "pointer" };
 
 const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
 
-  // const [imgText, setImgText] = useState('');
+  const [imgText, setImgText] = useState('');
 
   const imgStyle = { margin: margin };
   if (direction === "column") {
@@ -21,9 +21,9 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
   };
 
   const onMouseOver = event => {
-    console.log(event.target.getAttribute('src'));
-    // setImgText(event.target.getAttribute('src'));
-  };
+    // console.log(event.target);
+    setImgText(event.target.parentElement.parentElement.firstElementChild.getAttribute('text'));
+  }
 
 
   return (
@@ -32,12 +32,11 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
         style={onClick ? { ...imgStyle, ...imgWithClick } : imgStyle}
         {...photo}
         // onClick={onClick ? handleClick : null}
-        onMouseOver={onMouseOver}
         alt="img"
         id='inside-img'
       />
-      <div className='overlay'>
-        <div className='overlay-text'>TEXT</div>
+      <div onMouseOver={onMouseOver} className='overlay'>
+        <div className='overlay-text'>{imgText}</div>
       </div>
     </div>
   );

@@ -26,7 +26,7 @@ class MyBoardPage extends Component {
     }
 
 
-    getImages = (count=5) => { 
+    getImages = (count=10) => { 
     	const localUser = JSON.parse(localStorage.getItem('currentUser'));	
     	const uid = localUser.id;
     	const userDocRef = firestore.collection(`users/${uid}/posts`);
@@ -41,7 +41,8 @@ class MyBoardPage extends Component {
 							var height = data.height;
 							var width = data.width;
 							var index = data.index;
-							var newImage = { src: src, height: height, width: width, index: index };
+							var text = data.text
+							var newImage = { src: src, height: height, width: width, index: index, text: text };
 							this.setState({
 								images: [...this.state.images, newImage],
 							});

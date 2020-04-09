@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Gallery from "react-photo-gallery";
-import Photo from "./photo";
+import Photo from "../photo/photo";
 import arrayMove from "array-move";
 import { SortableContainer, SortableElement } from "react-sortable-hoc";
 
