@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 // import FormInput from '../form-input/form-input';
 import CustomButton from '../custom-button/custom-button';
 
-import { selectUserImage } from '../../redux/user/user-selectors';
+import { selectUserImage, selectCurrentUser } from '../../redux/user/user-selectors';
 
 import './profile-settings.scss';
 
@@ -38,7 +38,15 @@ class ProfileSettings extends Component {
 						this.setState({
 							imageUrl: url
 						});
+
 						userRef.update({imageUrl: url});
+						
+						// const localUserStore = {
+						// 	...selectCurrentUser.data()
+						// };
+						// localStorage.removeItem('currentUser');
+      //    				localStorage.setItem('currentUser', JSON.stringify(localUserStore));
+
 					});
 		} catch (err) {
 			alert('Upload canceled');
@@ -52,7 +60,7 @@ class ProfileSettings extends Component {
 	            <form className='settings-form' onSubmit={this.handleSubmit}>
 	            	<div className='image-wrapper'>
 	            		<img src={this.state.imageUrl} 
-	            		alt='PROFILE' 
+	            		alt='Upload' 
 	            		className='profile-image'/>
 	            	</div>
 					<input type='file' 

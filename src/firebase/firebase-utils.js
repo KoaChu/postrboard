@@ -150,6 +150,7 @@ const config = {
                         height,
                         width,
                       })
+                      console.log('mediaUpload update success');
                     } catch (error) {
                       console.log('error updating user post ref', error.message);
                     }
@@ -160,10 +161,11 @@ const config = {
               .limit(1)
               .get()
               .then((snapShot) => {
-                if(!snapShot) {
+                if(snapShot.size===0) {
                   userPostsRef.set({
                     index: 0,
                   })
+                  console.log('index set success');
                 } else {
                     snapShot.forEach((doc) => {
                     var data = doc.data();
