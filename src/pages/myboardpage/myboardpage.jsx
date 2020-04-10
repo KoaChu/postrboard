@@ -41,8 +41,9 @@ class MyBoardPage extends Component {
 							var height = data.height;
 							var width = data.width;
 							var index = data.index;
-							var text = data.text
-							var newImage = { src: src, height: height, width: width, index: index, text: text };
+							var text = data.text;
+                            var imgUid = uid;
+							var newImage = { src: src, height: height, width: width, index: index, text: text, uid: imgUid };
 							this.setState({
 								images: [...this.state.images, newImage],
 							});
