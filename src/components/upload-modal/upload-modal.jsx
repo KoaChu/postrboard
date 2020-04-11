@@ -26,13 +26,19 @@ class UploadModal extends Component {
         	imageRef: '',
         	height: 0,
         	width: 0,
-        	value: ''
+        	value: '',
+            isLoading: false,
+            isUploading: false,
         }
     }
 
 
     handleUploadPreview = (event) => {
     	event.preventDefault();
+
+        this.setState({
+            isLoading: true
+        });
 
     	var reader = new FileReader();
     	var file = event.target.files[0];
@@ -45,6 +51,7 @@ class UploadModal extends Component {
     			imageRef: storageRef.child(`${auth.currentUser.uid}/${file.name}`),
                 buttonVis: 'button-fade',
                 instructionsVis: 'instructions-hide',
+                isLoading: false,
     		});
     	}
     	reader.readAsDataURL(file);
@@ -98,13 +105,6 @@ class UploadModal extends Component {
 
     render() {
 
-        const ToolTip = ({ content }) => {
-            return(
-                <div className='tooltip'>
-                    {content}
-                </div>
-            )
-        };
 
         return (
             <Popup className='pop-up' trigger={<button className="open-button" id='modal-button'></button>} modal>
@@ -142,7 +142,9 @@ class UploadModal extends Component {
                                     document.getElementById('upload-input').click();
                                     
                                 }}/>
+                          {this.state.isLoading ? <span>LOADING...</span> :
 				          <img src={this.state.filePreview} alt='' className='image-preview'/>
+                          }
                           <span className={this.state.instructionsVis}>Upload a video/image</span>
 				        </div>
 				        <div className='content-text-wrapper'>
@@ -153,11 +155,23 @@ class UploadModal extends Component {
 			          <CustomButton
             			onClick={() => {
             				if((this.state.file !== '')&&(this.state.width !== 0)&&(this.state.height !== 0)) {
+                                this.setState({
+                                    isUploading: true
+                                });
             					uploadUserMedia(this.state.file, 
             									document.getElementById('post-description').value, 
             									this.state.fileName, 
             									this.state.height, 
-            									this.state.width);
+            									this.state.width)
+                                                .then(event => {
+                                                    this.setState({
+                                                        isUploading: false
+                                                    });
+                                                    // setTimeout(() => {
+                                                    //     console.log('timeout');
+                                                    // }, 3000);
+                                                    close();
+                                                });
             					this.setState({
 					              	file: '',
 					              	filePreview: '',
@@ -172,10 +186,10 @@ class UploadModal extends Component {
             					alert('Please upload a media file and/or select a size.');
             					return;
             				}
-            				console.log('posted');
-            				close();
+            				// console.log('posted');
+            				// close();
             			}}
-            			> Post 
+            			> Post
 			          </CustomButton>
 			          <CustomButton
 			          	className='cancel-button'

@@ -44,10 +44,6 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
     setTrashHovered('');
   };
 
-  // const onMouseOut = event => {
-  //   setImgUid('');
-  // };
-
 
   return (
     <div className='container'>
@@ -70,8 +66,10 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
               className={`${trashHovered} trash-like`}>
               like
         </span>}
-      <div onMouseOver={onMouseOver} className='overlay'>
-        <div className='overlay-text'>{imgText}</div>
+      <div onMouseEnter={onMouseOver} className='overlay'>
+        <div className='overlay-text'>
+          <span>{imgText}</span>
+        </div>
       </div>
     </div>
   );
