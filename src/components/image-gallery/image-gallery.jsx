@@ -20,9 +20,11 @@ const ImageGallery = ({ disabled, images }) => {
 	// console.log(Date.now() + " phpress: " + JSON.stringify(photos));
 
 	const [items, setItems] = useState(images);
+  const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
 		setItems(images);
+    setIsLoading(false);
 		// console.log("USE EFFECT CALLED" + JSON.stringify(items));
 	},[images]);
 
@@ -37,11 +39,13 @@ const ImageGallery = ({ disabled, images }) => {
       	return;
       } else if(newIndex < oldIndex) {
         //need to push all indexes < AND = NEW DB INDEX DOWN and keep any with an index < old DB index
-        updatePushDown(oldDBIndex, newDBIndex);
+        setIsLoading(true);
+        updatePushDown(oldDBIndex, newDBIndex).then(event => {setIsLoading(false);});
       	return;
       }	else if(newIndex > oldIndex) {
         //need to push all indexes > AND = NEW DB INDEX UP and keep any with an index > old DB index
-        updatePushUp(oldDBIndex, newDBIndex);
+        setIsLoading(true);
+        updatePushUp(oldDBIndex, newDBIndex).then(event => {setIsLoading(false);});
    		return;
       } else {
       	return;
@@ -50,7 +54,9 @@ const ImageGallery = ({ disabled, images }) => {
 
     return (
         <div className='image-gallery'>
+          {isLoading === true ? <div>LOADING...</div> :
         	<SortableGallery items={items} disableAutoscroll={true} pressDelay={200} onSortEnd={onSortEnd} axis={"xy"} />
+          }
         </div>
     );
 };

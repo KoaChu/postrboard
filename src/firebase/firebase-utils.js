@@ -196,7 +196,7 @@ const config = {
                 snapshot.forEach((doc) => {     
                   var refName = doc.id;
                   var userPostRef = firestore.doc(`users/${auth.currentUser.uid}/posts/${refName}`);
-                  console.log(refName);
+                  // console.log(refName);
 
                   userPostRef.update({
                     index: newDBIndex

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 
 import { firestore } from '../../firebase/firebase-utils';
 
+import { ReactComponent as Trash } from '../../assets/trash.svg';
+
 import './photo.scss';
 
 const imgWithClick = { cursor: "pointer" };
@@ -14,6 +16,7 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
 
   const [imgText, setImgText] = useState('');
   const [imgUid, setImgUid] = useState('');
+  const [trashHovered, setTrashHovered] = useState('');
 
   const imgStyle = { margin: margin };
   if (direction === "column") {
@@ -34,7 +37,11 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
   };
 
   const onTrashLikeMouseOver = event => {
-    console.log('moused trsh');
+    setTrashHovered('trash-like-hovered');
+  };
+
+  const onTrashLikeMouseOut = event => {
+    setTrashHovered('');
   };
 
   // const onMouseOut = event => {
@@ -51,7 +58,18 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
         alt="img"
         id='inside-img'
       />
-      {imgUid === localUid ? <span onMouseOver={onTrashLikeMouseOver} className='trash-like'>trash</span> : <span onMouseOver={onTrashLikeMouseOver} className='trash-like'>like</span>}
+      {imgUid === localUid ? 
+        <span onMouseOver={onTrashLikeMouseOver} 
+              onMouseOut={onTrashLikeMouseOut} 
+              className={`${trashHovered} trash-like`}>
+              <Trash className={`${trashHovered} trash-like`}/>
+        </span> 
+        : 
+        <span onMouseOver={onTrashLikeMouseOver} 
+              onMouseOut={onTrashLikeMouseOut} 
+              className={`${trashHovered} trash-like`}>
+              like
+        </span>}
       <div onMouseOver={onMouseOver} className='overlay'>
         <div className='overlay-text'>{imgText}</div>
       </div>

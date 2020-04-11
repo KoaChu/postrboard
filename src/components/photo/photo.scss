@@ -27,7 +27,6 @@ img {
 	transition: .5s ease;
 	display: flex;
 	position: absolute;
-	border: 1px solid red;
 	padding-top: 1vw;
 	padding-right: 1.5vw;
 	top: 0;
@@ -38,8 +37,9 @@ img {
  	opacity: 0;
 }
 
-.trash-like:hover {
-	opacity: 0.7;
+.trash-like-hovered {
+	opacity: 0.7 !important;
+	cursor: pointer;
 }
 
 .container:hover .trash-like {
