@@ -76,7 +76,7 @@ const config = {
     } catch (err) {
       console.log(err);
     }
-    console.log(profileImage);
+    // console.log(profileImage);
     return profileImage;
   };
 
@@ -99,92 +99,91 @@ const config = {
 
   };
 
-  export const uploadUserMedia = async (file, text, fileName, height, width) => {
+  // export const uploadUserMedia = async (file, text, fileName, height, width) => {
 
-    var mediaUploadTask = storageRef.child(`${auth.currentUser.uid}/${file.name}`).put(file);
+  //   var mediaUploadTask = storageRef.child(`${auth.currentUser.uid}/${file.name}`).put(file);
 
-    const userDocRef = firestore.collection(`users/${auth.currentUser.uid}/posts`);
-    const userPostsRef = firestore.doc(`users/${auth.currentUser.uid}/posts/${fileName}`);
+  //   const userDocRef = firestore.collection(`users/${auth.currentUser.uid}/posts`);
+  //   const userPostsRef = firestore.doc(`users/${auth.currentUser.uid}/posts/${fileName}`);
 
-    const createdAt = new Date();
+  //   const createdAt = new Date();
 
-    mediaUploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
-      (snapshot) => {
-        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+  //    await userDocRef.orderBy('index', 'desc')
+  //       .limit(1)
+  //       .get()
+  //       .then((snapShot) => {
+  //         if(snapShot.size===0) {
+  //           userPostsRef.set({
+  //             index: 0,
+  //           })
+  //           // console.log('first index set success');
+  //         } else {
+  //             snapShot.forEach((doc) => {
+  //             var data = doc.data();
+  //             var index = data.index + 1;
 
-        console.log('Upload is ' + progress + '% done');
-        switch (snapshot.state) {
-          case firebase.storage.TaskState.PAUSED: // or 'paused'
-            // console.log('Upload is paused');
-            break;
-          case firebase.storage.TaskState.RUNNING: // or 'running'
-            // console.log('Upload is running');
-            break;
-          default:
-            break;
-        }
-      }, (error) => {
-            switch (error.code) {
-              case 'storage/unauthorized':
-                console.log('User doesn\'t have permission to access the object');
-                break;
-              case 'storage/canceled':
-                console.log('User canceled the upload');
-                break;
-              case 'storage/unknown':
-                console.log('Unknown error occurred, inspect error.serverResponse');
-                break;
-              default:
-                break;
-            }
-          }, () => {
-                mediaUploadTask.snapshot.ref.getDownloadURL().then(function(mediaURL) {
-                  try {
-                      userPostsRef.update({
-                        fileName,
-                        mediaURL,
-                        text,
-                        likes: 0,
-                        notes: 0,
-                        createdAt,
-                        height,
-                        width,
-                      })
-                      console.log('mediaUpload update success');
-                    } catch (error) {
-                      console.log('error updating user post ref', error.message);
-                    }
-                });
-              });
-
-    userDocRef.orderBy('index', 'desc')
-              .limit(1)
-              .get()
-              .then((snapShot) => {
-                if(snapShot.size===0) {
-                  userPostsRef.set({
-                    index: 0,
-                  })
-                  console.log('index set success');
-                } else {
-                    snapShot.forEach((doc) => {
-                    var data = doc.data();
-                    var index = data.index + 1;
-
-                    userPostsRef.set({
-                      index,
-                    });
-                  });
-                    
-                }
-              }
-              )
-              .catch((err) => {
-                console.log(err);
-              });
+  //             userPostsRef.set({
+  //               index,
+  //             });
+  //             // console.log('index set success');
+  //           });
               
-    return createdAt;
-  };
+  //         }
+  //       }).then((snap) => {
+  //         mediaUploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
+  //           (snapshot) => {
+  //             var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+
+  //             console.log('Upload is ' + progress + '% done');
+  //             switch (snapshot.state) {
+  //               case firebase.storage.TaskState.PAUSED: // or 'paused'
+  //                 // console.log('Upload is paused');
+  //                 break;
+  //               case firebase.storage.TaskState.RUNNING: // or 'running'
+  //                 // console.log('Upload is running');
+  //                 break;
+  //               default:
+  //                 break;
+  //             }
+  //           }, (error) => {
+  //                 switch (error.code) {
+  //                   case 'storage/unauthorized':
+  //                     console.log('User doesn\'t have permission to access the object');
+  //                     break;
+  //                   case 'storage/canceled':
+  //                     console.log('User canceled the upload');
+  //                     break;
+  //                   case 'storage/unknown':
+  //                     console.log('Unknown error occurred, inspect error.serverResponse');
+  //                     break;
+  //                   default:
+  //                     break;
+  //                 }
+  //               }, () => {
+  //                   mediaUploadTask.snapshot.ref.getDownloadURL().then(function(mediaURL) {
+  //                       try {
+  //                           userPostsRef.update({
+  //                             fileName,
+  //                             mediaURL,
+  //                             text,
+  //                             likes: 0,
+  //                             notes: 0,
+  //                             createdAt,
+  //                             height,
+  //                             width,
+  //                           })
+  //                           console.log('mediaUpload update success');
+  //                         } catch (error) {
+  //                           console.log('error updating user post ref', error.message);
+  //                         }
+  //                     });
+  //                   });
+  //       });
+
+  //       return "Kim Kim Kim";
+              
+  //   // return 1;
+  // };
 
   export const updatePushDown = async (oldDBIndex, newDBIndex) => {
     const userDocRef = firestore.collection(`users/${auth.currentUser.uid}/posts`);
@@ -280,6 +279,7 @@ const config = {
   export const auth = firebase.auth();
   export const firestore = firebase.firestore();
   export const storageRef = firebase.storage().ref();
+  export const firebaseStorage = firebase.storage;
 
 
   export default firebase;

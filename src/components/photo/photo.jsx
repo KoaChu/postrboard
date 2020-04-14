@@ -36,6 +36,10 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
     setImgUid(event.target.parentElement.parentElement.firstElementChild.getAttribute('uid'));
   };
 
+  const onMouseLeave = event => {
+    setImgUid('');
+  };
+
   const onTrashLikeMouseOver = event => {
     setTrashHovered('trash-like-hovered');
   };

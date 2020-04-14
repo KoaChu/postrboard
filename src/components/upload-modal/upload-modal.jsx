@@ -6,7 +6,7 @@ import { ReactComponent as Icon } from '../../assets/uploadv2.svg';
 
 import CustomButton from '../custom-button/custom-button';
 
-import { uploadUserMedia, setUserPosts, storageRef, auth } from '../../firebase/firebase-utils';
+import { storageRef, auth, firestore, firebaseStorage } from '../../firebase/firebase-utils';
 
 import './upload-modal.scss';
 
@@ -28,7 +28,6 @@ class UploadModal extends Component {
         	width: 0,
         	value: '',
             isLoading: false,
-            isUploading: false,
         }
     }
 
@@ -153,25 +152,101 @@ class UploadModal extends Component {
 			        </div>
 			        <div className="actions">
 			          <CustomButton
-            			onClick={() => {
+            			onClick={async () => {
             				if((this.state.file !== '')&&(this.state.width !== 0)&&(this.state.height !== 0)) {
                                 this.setState({
-                                    isUploading: true
+                                    isLoading: true
                                 });
-            					uploadUserMedia(this.state.file, 
-            									document.getElementById('post-description').value, 
-            									this.state.fileName, 
-            									this.state.height, 
-            									this.state.width)
-                                                .then(event => {
-                                                    this.setState({
-                                                        isUploading: false
-                                                    });
-                                                    // setTimeout(() => {
-                                                    //     console.log('timeout');
-                                                    // }, 3000);
-                                                    close();
-                                                });
+
+                                let thisComponent = this;
+
+                                var fileName = this.state.fileName;
+                                var height = this.state.height;
+                                var width = this.state.width;
+
+                                var index = -1;
+
+                                var mediaUploadTask = storageRef.child(`${auth.currentUser.uid}/${this.state.fileName}`).put(this.state.file);
+
+                                const userDocRef = firestore.collection(`users/${auth.currentUser.uid}/posts`);
+                                const userPostsRef = firestore.doc(`users/${auth.currentUser.uid}/posts/${this.state.fileName}`);
+
+                                const createdAt = new Date();
+
+                                await userDocRef.orderBy('index', 'desc')
+                                                .limit(1)
+                                                .get()
+                                                .then((snapShot) => {
+                                                    try{
+                                                          if(snapShot.size===0) {
+                                                            index = 0;
+                                                            // console.log('first index set success');
+                                                          } else {
+                                                              snapShot.forEach((doc) => {
+                                                              var data = doc.data();
+                                                              index = (data.index + 1);
+                                                              // console.log('index set success');
+                                                            });                                                              
+                                                          }
+                                                      } catch (err) {
+                                                        console.log(err.message);
+                                                      }
+                                                }).then( () => {
+                                                    mediaUploadTask.on(firebaseStorage.TaskEvent.STATE_CHANGED,
+                                                        (snapshot) => {
+                                                          var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+
+                                                          console.log('Upload is ' + progress + '% done');
+                                                          switch (snapshot.state) {
+                                                            case firebaseStorage.TaskState.PAUSED: // or 'paused'
+                                                              // console.log('Upload is paused');
+                                                              break;
+                                                            case firebaseStorage.TaskState.RUNNING: // or 'running'
+                                                              // console.log('Upload is running');
+                                                              break;
+                                                            default:
+                                                              break;
+                                                          }
+                                                        }, (error) => {
+                                                              switch (error.code) {
+                                                                case 'storage/unauthorized':
+                                                                  console.log('User doesn\'t have permission to access the object');
+                                                                  break;
+                                                                case 'storage/canceled':
+                                                                  console.log('User canceled the upload');
+                                                                  break;
+                                                                case 'storage/unknown':
+                                                                  console.log('Unknown error occurred, inspect error.serverResponse');
+                                                                  break;
+                                                                default:
+                                                                  break;
+                                                              }
+                                                            }, () => {
+                                                                mediaUploadTask.snapshot.ref.getDownloadURL().then(function(mediaURL) {
+                                                                    try {
+                                                                        userPostsRef.set({
+                                                                          fileName,
+                                                                          mediaURL,
+                                                                          index,
+                                                                          text: document.getElementById('post-description').value,
+                                                                          likes: 0,
+                                                                          notes: 0,
+                                                                          createdAt,
+                                                                          height,
+                                                                          width,
+                                                                        });
+                                                                        // console.log('isLoading: ' + thisComponent.state.isLoading);
+                                                                        thisComponent.setState({isLoading: false});
+                                                                        // console.log('mediaUpload update success...isLoading: ' + thisComponent.state.isLoading);
+                                                                        close();
+                                                                      } catch (error) {
+                                                                        console.log('error updating user post ref', error.message);
+                                                                        thisComponent.setState({isLoading: false});
+                                                                        close();
+                                                                      }
+                                                                  });
+                                                                });
+                                                        });
             					this.setState({
 					              	file: '',
 					              	filePreview: '',
@@ -180,7 +255,8 @@ class UploadModal extends Component {
                                     instructionsVis: 'instructions',
 					              	imageRef: '',
 					              	height: 0,
-					              	width: 0
+					              	width: 0,
+                                    // isLoading: false
 					              });
             				} else {
             					alert('Please upload a media file and/or select a size.');
@@ -217,9 +293,5 @@ class UploadModal extends Component {
     }
 }
 
-const mapDispatchToProps = dispatch => ({
-	uploadUserMedia: () => dispatch(uploadUserMedia()),
-	setUserPosts: () => dispatch(setUserPosts())
-});
 
-export default connect(null, mapDispatchToProps)(UploadModal);
+export default UploadModal;
