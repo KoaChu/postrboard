@@ -8,7 +8,6 @@ const NotesPage = () => {
     return (
         <div className='notespage'>
         	<h1>Notes Page</h1>
-        	<LoadingIndicator />
         </div>
     );
 };

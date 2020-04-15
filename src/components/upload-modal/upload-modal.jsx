@@ -6,6 +6,7 @@ import { ReactComponent as Icon } from '../../assets/uploadv2.svg';
 
 import CustomButton from '../custom-button/custom-button';
 import LoadingIndicator from '../loading-indicator/loading-indicator';
+import ProgressBar from '../progress-bar/progress-bar';
 
 import { storageRef, auth, firestore, firebaseStorage } from '../../firebase/firebase-utils';
 
@@ -32,6 +33,7 @@ class UploadModal extends Component {
             isLoading: false,
             buttonSelectable: '',
             posting: 'Post',
+            progress: 0,
         }
     }
 
@@ -130,6 +132,7 @@ class UploadModal extends Component {
 			        {this.state.isUploading 
                     ?  <div className='loading-spinner'>
                             <LoadingIndicator className='spinner' loadingText='Uploading' />
+                            <ProgressBar className='upload-progress' progress={this.state.progress} />
                         </div>
                     :  <div className='modal'><div className='modal-header'>
     			        	<h3>New Post</h3>
@@ -219,6 +222,9 @@ class UploadModal extends Component {
                                                           var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
 
                                                           console.log('Upload is ' + progress + '% done');
+                                                          this.setState({
+                                                            progress: progress
+                                                          });
                                                           switch (snapshot.state) {
                                                             case firebaseStorage.TaskState.PAUSED: // or 'paused'
                                                               // console.log('Upload is paused');
@@ -262,6 +268,7 @@ class UploadModal extends Component {
                                                                             isUploading: false,
                                                                             buttonSelectable: '',
                                                                             posting: 'Post',
+                                                                            progress: 0,
                                                                         });
                                                                         console.log('mediaUpload update success...isLoading: ' + thisComponent.state.isLoading);
                                                                         close();
@@ -274,6 +281,7 @@ class UploadModal extends Component {
                                                                             isUploading: false,
                                                                             buttonSelectable: '',
                                                                             posting: 'Post',
+                                                                            progress: 0,
                                                                         });
                                                                         close();
                                                                       }

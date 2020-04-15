@@ -55,7 +55,7 @@ const ImageGallery = ({ disabled, images }) => {
     return (
         <div className='image-gallery'>
           {isLoading ? <div>LOADING...</div> :
-        	<SortableGallery items={items} disableAutoscroll={true} pressDelay={200} onSortEnd={onSortEnd} axis={"xy"} />
+        	<SortableGallery items={items} disableAutoscroll={true} pressDelay={500} onSortEnd={onSortEnd} axis={"xy"} />
           }
         </div>
     );
