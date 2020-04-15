@@ -1,4 +1,7 @@
-
+.hidden-refresh{
+  display: none;
+  user-select: none;
+}
 .hidden-input {
   display: none;
 }
@@ -20,7 +23,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  outline: 2px solid black;
+  // outline: 2px solid black;
   min-width: 400px;
 }
 .modal .content {
@@ -223,6 +226,8 @@ option {
   font-weight: bolder;
   width: 20%;
   height: 70%;
+  user-select: none;
+  pointer-events: none;
 }
 
 .instructions-hide {
@@ -239,6 +244,43 @@ option {
   visibility: hidden;
   // transition: opacity 1s;
 }
+
+#unselect {
+  user-select: none;
+  pointer-events: none;
+  cursor: default;
+  color: black;
+  background-color: white;
+  border: 1px solid black;
+}
+
+// .loading-indicator {
+//   font-weight: bold;
+//   font-size: 1vw;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   position: absolute;
+//   width: 20%;
+//   height: 50%;
+//   pointer-events: none;
+//   user-select: none;
+//   border: 1px solid red;
+// }
+.loading-spinner {
+  font-weight: bolder;
+  font-size: 1.5em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 70%;
+
+  &.spinner {
+    transform: translateX(-10%);
+  }
+}
+
 
 
 

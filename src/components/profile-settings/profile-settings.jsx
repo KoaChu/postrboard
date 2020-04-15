@@ -50,6 +50,7 @@ class ProfileSettings extends Component {
 									};
 									localStorage.removeItem('currentUser');
           							localStorage.setItem('currentUser', JSON.stringify(newLocalUserStore));
+          							document.getElementById('hidden-refresh-settings').click();
 								})
 								.catch((err) => {
 									console.log(err.message);
@@ -74,6 +75,7 @@ class ProfileSettings extends Component {
     render() {
         return (
         	<div className='profile-settings'>
+        	<a className='hidden-refresh' id='hidden-refresh-settings' href='/settings'></a>
 	            <form className='settings-form' onSubmit={this.handleSubmit}>
 	            	<div className='image-wrapper'>
 	            		<img src={this.state.imageUrl} 
@@ -91,7 +93,6 @@ class ProfileSettings extends Component {
 					}}>
 					Change Profile Picture
 					</CustomButton>
-					<span className='refresh-span'>*refresh the page to update menu image</span>
 					<CustomButton type='submit'>Save</CustomButton>
 				</form>
 			</div>

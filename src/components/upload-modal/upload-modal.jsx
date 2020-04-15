@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { ReactComponent as Icon } from '../../assets/uploadv2.svg';
 
 import CustomButton from '../custom-button/custom-button';
+import LoadingIndicator from '../loading-indicator/loading-indicator';
 
 import { storageRef, auth, firestore, firebaseStorage } from '../../firebase/firebase-utils';
 
@@ -21,6 +22,7 @@ class UploadModal extends Component {
         	filePreview: '',
         	file: '',
         	fileName: '',
+            postText: '',
         	buttonVis: 'upload-icon',
             instructionsVis: 'instructions',
         	imageRef: '',
@@ -28,7 +30,15 @@ class UploadModal extends Component {
         	width: 0,
         	value: '',
             isLoading: false,
+            buttonSelectable: '',
+            posting: 'Post',
         }
+    }
+
+    handleTextChange = (event) => {
+        this.setState({
+            postText: event.target.value
+        });
     }
 
 
@@ -51,6 +61,7 @@ class UploadModal extends Component {
                 buttonVis: 'button-fade',
                 instructionsVis: 'instructions-hide',
                 isLoading: false,
+                isUploading: false,
     		});
     	}
     	reader.readAsDataURL(file);
@@ -106,6 +117,8 @@ class UploadModal extends Component {
 
 
         return (
+            <div className='modal-wrapper'>
+            <a className='hidden-refresh' id='hidden-refresh' href='/myboard'></a>
             <Popup className='pop-up' trigger={<button className="open-button" id='modal-button'></button>} modal>
 			    {close => (
 			      <div className="modal">
@@ -114,48 +127,56 @@ class UploadModal extends Component {
                         href='#'>
 			          &#10799;
 			        </a>
-			        <div className='modal-header'>
-			        	<h3>New Post</h3>
-			        	<div className='select-wrapper'>
-			        		<select className='option-select' placeholder='Size' onChange={this.handleSize}>
-			        			<option value='' disabled selected default hidden>Choose a size ↓</option>
-			        			<option value='0'>Tall</option>
-			        			<option value='1'>Square</option>
-			        			<option value='2'>Wide</option>
-			        			<option value='3'>Panorama</option>
-			        		</select>
-			        	</div>
-			        </div>
-			        <div className="content-wrapper">
-				        <div className="content">
-				          <input type='file' 
-				          		 id='upload-input' 
-				          		 className='hidden-input' 
-				          		 accept='video/*,image/*' 
-				          		 onInput={this.handleUploadPreview} 
-				          		 required />
-				         <Icon className={this.state.buttonVis} 
-                                width='1em' 
-                                height='1em' 
-                                onClick={() => {
-                                    document.getElementById('upload-input').click();
-                                    
-                                }}/>
-                          {this.state.isLoading ? <span>LOADING...</span> :
-				          <img src={this.state.filePreview} alt='' className='image-preview'/>
-                          }
-                          <span className={this.state.instructionsVis}>Upload a video/image</span>
-				        </div>
-				        <div className='content-text-wrapper'>
-				        	<textarea className='content-text' id='post-description' type='text' placeholder='Write a description...' required />
-				        </div>
-			        </div>
+			        {this.state.isUploading 
+                    ?  <div className='loading-spinner'>
+                            <LoadingIndicator className='spinner' loadingText='Uploading' />
+                        </div>
+                    :  <div className='modal'><div className='modal-header'>
+    			        	<h3>New Post</h3>
+    			        	<div className='select-wrapper'>
+    			        		<select className='option-select' placeholder='Size' onChange={this.handleSize}>
+    			        			<option value='' disabled selected default hidden>Choose a size ↓</option>
+    			        			<option value='0'>Tall</option>
+    			        			<option value='1'>Square</option>
+    			        			<option value='2'>Wide</option>
+    			        			<option value='3'>Panorama</option>
+    			        		</select>
+    			        	</div>
+    			        </div>
+    			        <div className="content-wrapper">
+    				        <div className="content">
+    				          <input type='file' 
+    				          		 id='upload-input' 
+    				          		 className='hidden-input' 
+    				          		 accept='video/*,image/*' 
+    				          		 onInput={this.handleUploadPreview} 
+    				          		 required />
+    				         <Icon className={this.state.buttonVis} 
+                                    width='1em' 
+                                    height='1em' 
+                                    onClick={() => {
+                                        document.getElementById('upload-input').click();
+                                        
+                                    }}/>
+                              {this.state.isLoading ? <span className='loading-indicator'>Loading...</span> :
+    				          <img src={this.state.filePreview} alt='' className='image-preview'/>
+                              }
+                              <span className={this.state.instructionsVis}>Upload a video/image</span>
+    				        </div>
+    				        <div className='content-text-wrapper'>
+    				        	<textarea className='content-text' id='post-description' type='text' placeholder='Write a description...' onChange={this.handleTextChange} required />
+    				        </div>
+    			        </div>
+                        </div>}
 			        <div className="actions">
 			          <CustomButton
+                        id={this.state.buttonSelectable}
             			onClick={async () => {
             				if((this.state.file !== '')&&(this.state.width !== 0)&&(this.state.height !== 0)) {
                                 this.setState({
-                                    isLoading: true
+                                    isUploading: true,
+                                    buttonSelectable: 'unselect',
+                                    posting: 'Posting',
                                 });
 
                                 let thisComponent = this;
@@ -163,6 +184,7 @@ class UploadModal extends Component {
                                 var fileName = this.state.fileName;
                                 var height = this.state.height;
                                 var width = this.state.width;
+                                var text = this.state.postText;
 
                                 var index = -1;
 
@@ -228,7 +250,7 @@ class UploadModal extends Component {
                                                                           fileName,
                                                                           mediaURL,
                                                                           index,
-                                                                          text: document.getElementById('post-description').value,
+                                                                          text,
                                                                           likes: 0,
                                                                           notes: 0,
                                                                           createdAt,
@@ -236,12 +258,23 @@ class UploadModal extends Component {
                                                                           width,
                                                                         });
                                                                         // console.log('isLoading: ' + thisComponent.state.isLoading);
-                                                                        thisComponent.setState({isLoading: false});
-                                                                        // console.log('mediaUpload update success...isLoading: ' + thisComponent.state.isLoading);
+                                                                        thisComponent.setState({
+                                                                            isUploading: false,
+                                                                            buttonSelectable: '',
+                                                                            posting: 'Post',
+                                                                        });
+                                                                        console.log('mediaUpload update success...isLoading: ' + thisComponent.state.isLoading);
                                                                         close();
+                                                                        setTimeout(() => {
+                                                                            document.getElementById('hidden-refresh').click();
+                                                                        }, 1000);
                                                                       } catch (error) {
                                                                         console.log('error updating user post ref', error.message);
-                                                                        thisComponent.setState({isLoading: false});
+                                                                        thisComponent.setState({
+                                                                            isUploading: false,
+                                                                            buttonSelectable: '',
+                                                                            posting: 'Post',
+                                                                        });
                                                                         close();
                                                                       }
                                                                   });
@@ -256,6 +289,7 @@ class UploadModal extends Component {
 					              	imageRef: '',
 					              	height: 0,
 					              	width: 0,
+                                    text: '',
                                     // isLoading: false
 					              });
             				} else {
@@ -265,7 +299,7 @@ class UploadModal extends Component {
             				// console.log('posted');
             				// close();
             			}}
-            			> Post
+            			> {this.state.posting}
 			          </CustomButton>
 			          <CustomButton
 			          	className='cancel-button'
@@ -289,6 +323,7 @@ class UploadModal extends Component {
 			      </div>
 			    )}
 			</Popup>
+            </div>
         );
     }
 }

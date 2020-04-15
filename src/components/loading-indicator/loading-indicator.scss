@@ -1,0 +1,26 @@
+.loading-indicator {
+	display: flex;
+	flex-direction: row;
+	align-items: flex-end;
+	width: 15%;
+}
+.loading-circle {
+	height: 1.5vw;
+	width: 1.5vw;
+	transform-origin: center 56%;
+	animation-name: loading-spin;
+	animation-timing-function: ease-in-out;
+	animation-iteration-count: infinite;
+	animation-duration: 0.7s;
+	backface-visibility: hidden;
+	transform: translateZ(0) scale(1, 1);
+}
+
+.loading-text {
+	margin-left: 0.3vw;
+}
+
+@keyframes loading-spin {
+	from { transform: rotate(0deg); }
+	to { transform: rotate(360deg); }
+}
