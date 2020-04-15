@@ -13,6 +13,8 @@ import ProfileDropdown from '../profile-dropdown/profile-dropdown';
 import UploadIcon from '../upload-icon/upload-icon';
 import CurrentAccount from '../current-account/current-account';
 
+import { ReactComponent as Logo } from '../../assets/logo.svg';
+
 import './header.scss';
 
 const Header = ({ currentUser, hidden }) => {
@@ -20,7 +22,8 @@ const Header = ({ currentUser, hidden }) => {
         localStorage.getItem('currentUser') ?
             (<div className='header'>
                 <Link className='logo-container' to="/">
-                    LOGO
+                    <Logo className='postrboard-logo'/>
+                    <span className='logo-text'>postrboard</span>
                 </Link>
                 {/*<CurrentAccount />*/}
                 <div className='options-container'>
@@ -38,7 +41,10 @@ const Header = ({ currentUser, hidden }) => {
                 </div>
                 {hidden ? null : <ProfileDropdown />}
             </div>)
-        : <div className='pre-logo'>postrboard</div>
+        : <div className='pre-logo'>
+            <Logo className='postr-pre-logo'/>
+            <span className='pre-text'>postrboard</span>
+            </div>
     );
 };
 

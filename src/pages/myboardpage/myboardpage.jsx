@@ -13,6 +13,7 @@ class MyBoardPage extends Component {
 
         this.state = {
         	images: [],
+            postCount: 0,
         	// currentUser: JSON.parse(localStorage.getItem('currentUser'))
         	// count: 0,
         	// i: 0
@@ -22,9 +23,32 @@ class MyBoardPage extends Component {
 
     componentDidMount() {
     	this.getImages();
+        this.getMaxIndex();
     	// console.log(Date.now() + " component did mount: " + JSON.stringify(this.state.images));
     }
 
+    getMaxIndex = () => {
+        const localUser = JSON.parse(localStorage.getItem('currentUser'));  
+        const uid = localUser.id;
+        const userDocRef = firestore.collection(`users/${uid}/posts`);
+
+        userDocRef.orderBy('index', 'desc')
+                    .limit(1)
+                    .get()
+                    .then((snapShot) => {
+                        snapShot.forEach((doc) => {
+                            var data = doc.data();
+                            var postCount = data.index;
+                            this.setState({
+                                postCount: postCount,
+                            });
+                            // console.log(this.state.postCount);
+                        });
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+    };
 
     getImages = (count=10) => { 
     	const localUser = JSON.parse(localStorage.getItem('currentUser'));	
@@ -62,7 +86,7 @@ class MyBoardPage extends Component {
     	// console.log(Date.now() + " in render: " + JSON.stringify(this.state.images));
         return (
             <div className='myboardpage'> 
-	        	{auth.currentUser && <ImageGallery disabled={false} images={this.state.images} />}
+	        	{auth.currentUser && <ImageGallery disabled={false} images={this.state.images} postCount={this.state.postCount} />}
         	</div>
         );
     }

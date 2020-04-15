@@ -9,10 +9,13 @@
   user-select: none;
   
   .logo-container {
+    display: flex;
+    flex-direction: column;
     height: 100%;
-    width: 70px;
-    padding: 0px 20px;
-    padding-right: 300px;
+    width: 10vw;
+    padding-right: 5vw;
+    margin-right: 10vw;
+    // border: 1px solid red;
   }
 
   .options-container {
@@ -27,11 +30,38 @@
       cursor: pointer;
     }
   }
+
+  .postrboard-logo {
+    position: relative;
+    height: inherit;
+    width: inherit;
+    margin-right: 0vw;
+    margin-left: -4vw;
+  }
+  .logo-text{
+    font-weight: 500;
+    position: absolute;
+    transform: translate(70%, 20%);
+    margin-left: -19px;
+  }
 }
 .pre-logo {
-  height: 90%;
-  width: 70px;
-  padding: 10px;
+  height: 5vw;
+  width: 20vw;
+  padding-top: 1vw;
   user-select: none;
   font-size: 20px;
+}
+
+.pre-text {
+  position: absolute;
+  margin-left: 4vw;
+  transform: translateY(1vw);
+}
+
+.postr-pre-logo {
+  height: inherit;
+  width: inherit;
+  position: absolute;
+  transform: translate(-8vw, -0.7vw) scale(0.6);
 }

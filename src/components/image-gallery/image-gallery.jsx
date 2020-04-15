@@ -9,7 +9,7 @@ import { updatePushDown, updatePushUp } from '../../firebase/firebase-utils';
 import './image-gallery.scss';
 
 
-const ImageGallery = ({ disabled, images }) => {
+const ImageGallery = ({ disabled, images, postCount }) => {
 
 	const SortablePhoto = SortableElement(item => <Photo {...item} />);
 	const SortableGallery = SortableContainer(({ items }) => (
@@ -32,8 +32,9 @@ const ImageGallery = ({ disabled, images }) => {
     const onSortEnd = ({ oldIndex, newIndex }) => {
       setItems(arrayMove(items, oldIndex, newIndex));
 
-      var newDBIndex = (items.length-1) - newIndex;
-      var oldDBIndex = (items.length-1) - oldIndex;
+      var newDBIndex = postCount - newIndex;
+      var oldDBIndex = postCount - oldIndex;
+      console.log(postCount + 'items length: ' + items.length);
 
       if(newIndex===oldIndex) {
       	return;
