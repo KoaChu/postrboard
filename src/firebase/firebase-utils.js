@@ -237,7 +237,7 @@ const config = {
               snapshot.forEach((doc) => {     
                 var refName = doc.id;
                 var userPostRef = firestore.doc(`users/${auth.currentUser.uid}/posts/${refName}`);
-                console.log(refName);
+                // console.log(refName);
 
                 userPostRef.update({
                   index: newDBIndex
@@ -269,6 +269,33 @@ const config = {
 
 };
 
+  export const onDeleteIndexes = async (currDeleteIndex) => {
+    const userDocRef = firestore.collection(`users/${auth.currentUser.uid}/posts`);
+    // console.log(currIndex);
+
+    userDocRef.where('index', '>', currDeleteIndex)
+              .get()
+              .then((snapshot) => {
+                // console.log(snapshot);
+                snapshot.forEach((doc) => {
+                  var data = doc.data();
+                  var refName = doc.id;
+                  var currentIndex = data.index;
+
+                  console.log(data);
+                  console.log('in then');
+
+                  var userPostRef = firestore.doc(`users/${auth.currentUser.uid}/posts/${refName}`);
+
+                  userPostRef.update({
+                    index: currentIndex - 1
+                  });
+                });
+              })
+              .catch((err) => {
+                console.log(err.message);
+              });
+  };
 
   export const actionCodeSettings = {
     url: 'http://localhost:3000/'

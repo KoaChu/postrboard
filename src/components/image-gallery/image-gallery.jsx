@@ -34,7 +34,7 @@ const ImageGallery = ({ disabled, images, postCount }) => {
 
       var newDBIndex = postCount - newIndex;
       var oldDBIndex = postCount - oldIndex;
-      console.log(postCount + 'items length: ' + items.length);
+      // console.log(postCount + 'items length: ' + items.length);
 
       if(newIndex===oldIndex) {
       	return;

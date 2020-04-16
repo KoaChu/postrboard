@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { firestore } from '../../firebase/firebase-utils';
+import { firestore, auth, onDeleteIndexes } from '../../firebase/firebase-utils';
 
 import { ReactComponent as Trash } from '../../assets/trash.svg';
 
@@ -17,6 +17,8 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
   const [imgText, setImgText] = useState('');
   const [imgUid, setImgUid] = useState('');
   const [trashHovered, setTrashHovered] = useState('');
+  const [imgName, setImgName] = useState('');
+  const [imgIndex, setImgIndex] = useState(0);
 
   const imgStyle = { margin: margin };
   if (direction === "column") {
@@ -27,13 +29,15 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
 
   const handleClick = event => {
     onClick(event, { photo, index });
-    console.log(index);
+    // console.log(index);
   };
 
   const onMouseOver = event => {
     // console.log(event.target.parentElement.parentElement.firstElementChild.getAttribute('uid'));
     setImgText(event.target.parentElement.parentElement.firstElementChild.getAttribute('text'));
     setImgUid(event.target.parentElement.parentElement.firstElementChild.getAttribute('uid'));
+    setImgIndex(event.target.parentElement.parentElement.firstElementChild.getAttribute('index'));
+    setImgName(event.target.parentElement.parentElement.firstElementChild.getAttribute('name'));
   };
 
   const onMouseLeave = event => {
@@ -46,6 +50,29 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
 
   const onTrashLikeMouseOut = event => {
     setTrashHovered('');
+  };
+
+  const handleDelete = (event) => {
+    var result = window.confirm('Are you sure?');
+
+    if(result == true){
+      var docRef = firestore.doc(`users/${auth.currentUser.uid}/posts/${ imgName }`);
+
+      docRef.delete()
+            .then(() => {
+              onDeleteIndexes(imgIndex);
+            });
+
+      // setTimeout(() => {
+      //   document.getElementById('hidden-refresh').click();
+      // }, 5000);
+      // console.log(imgName);
+      // console.log(imgIndex);
+      // console.log(event.target.parentElement.parentElement.firstElementChild);
+    } else {
+      return;
+    }
+
   };
 
 
@@ -61,6 +88,7 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
       {imgUid === localUid ? 
         <span onMouseOver={onTrashLikeMouseOver} 
               onMouseOut={onTrashLikeMouseOut} 
+              onClick={handleDelete}
               className={`${trashHovered} trash-like`}>
               <Trash className={`${trashHovered} trash-like`}/>
         </span> 
@@ -75,6 +103,7 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
           <span>{imgText}</span>
         </div>
       </div>
+      <a href='/myboard' id='hidden-refresh'></a>
     </div>
   );
 };

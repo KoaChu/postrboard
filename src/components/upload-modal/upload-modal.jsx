@@ -73,7 +73,7 @@ class UploadModal extends Component {
     handleSize = (event) => {
     	event.preventDefault();
     	var value = event.target.value;
-    	console.log(value);
+    	// console.log(value);
 
     	switch (event.target.value) {
     		case '0':
@@ -81,35 +81,35 @@ class UploadModal extends Component {
     				height: 4,
     				width: 3
     			});
-    			console.log('tall');
+    			// console.log('tall');
     			break;
     		case '1':
     			this.setState({
     				height: 1,
     				width: 1
     			});
-    			console.log('square');
+    			// console.log('square');
     			break;
     		case '2':
     			this.setState({
     				height: 3,
     				width: 4
     			});
-    			console.log('wide');
+    			// console.log('wide');
     			break;
     		case '3':
     			this.setState({
     				height: 1,
     				width: 5
     			});
-    			console.log('panorama');
+    			// console.log('panorama');
     			break;
     		default:
 	    		this.setState({
 	    				height: 0,
 	    				width: 0
 	    			});
-    			console.log('nothing');
+    			// console.log('nothing');
     			break;
     	}
     };
@@ -221,7 +221,7 @@ class UploadModal extends Component {
                                                         (snapshot) => {
                                                           var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
 
-                                                          console.log('Upload is ' + progress + '% done');
+                                                          // console.log('Upload is ' + progress + '% done');
                                                           this.setState({
                                                             progress: progress
                                                           });
@@ -270,7 +270,7 @@ class UploadModal extends Component {
                                                                             posting: 'Post',
                                                                             progress: 0,
                                                                         });
-                                                                        console.log('mediaUpload update success...isLoading: ' + thisComponent.state.isLoading);
+                                                                        // console.log('mediaUpload update success...isLoading: ' + thisComponent.state.isLoading);
                                                                         close();
                                                                         setTimeout(() => {
                                                                             document.getElementById('hidden-refresh').click();

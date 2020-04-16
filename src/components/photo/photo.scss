@@ -51,13 +51,16 @@ img {
 	display: flex;
 	position: absolute;
 	padding-top: 1vw;
-	padding-right: 1.5vw;
+	padding-right: 0.75vw;
+	padding-left: 0.75vw;
 	top: 0;
 	bottom: 1;
  	left: 1;
  	right: 0;
  	z-index: 2;
  	opacity: 0;
+ 	// border: 1px solid red;
+ 	transform: translate(-20%, 20%);
 }
 
 .trash-like-hovered {
@@ -91,4 +94,9 @@ img {
 .container:hover img  {
 	transform: scale(1.1, 1);
     transition: transform 6s cubic-bezier(0.25, 0.45, 0.45, 0.95);
+}
+
+#hidden-refresh {
+	user-select: none;
+	pointer-events: none;
 }
