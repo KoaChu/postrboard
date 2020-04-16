@@ -282,8 +282,7 @@ const config = {
                   var refName = doc.id;
                   var currentIndex = data.index;
 
-                  console.log(data);
-                  console.log('in then');
+                  // console.log(data);
 
                   var userPostRef = firestore.doc(`users/${auth.currentUser.uid}/posts/${refName}`);
 
