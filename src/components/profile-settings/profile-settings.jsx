@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { auth, storageRef, firestore } from '../../firebase/firebase-utils';
-import { createStructuredSelector } from 'reselect';
-import { connect } from 'react-redux';
 
 // import FormInput from '../form-input/form-input';
 import CustomButton from '../custom-button/custom-button';
@@ -43,7 +41,6 @@ class ProfileSettings extends Component {
 
 						userRef.get()
 								.then((snap) => {
-									const data = snap.data();
 									const newLocalUserStore = {
 										id: snap.id,
 										...snap.data()
@@ -75,7 +72,7 @@ class ProfileSettings extends Component {
     render() {
         return (
         	<div className='profile-settings'>
-        	<a className='hidden-refresh' id='hidden-refresh-settings' href='/settings'></a>
+        	<a className='hidden-refresh' id='hidden-refresh-settings' href='/settings'>''</a>
 	            <form className='settings-form' onSubmit={this.handleSubmit}>
 	            	<div className='image-wrapper'>
 	            		<img src={this.state.imageUrl} 

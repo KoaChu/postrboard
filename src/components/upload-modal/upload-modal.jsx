@@ -1,6 +1,5 @@
 import React, {  Component } from 'react';
 import Popup from 'reactjs-popup';
-import { connect } from 'react-redux';
 
 import { ReactComponent as Icon } from '../../assets/uploadv2.svg';
 
@@ -72,7 +71,6 @@ class UploadModal extends Component {
 
     handleSize = (event) => {
     	event.preventDefault();
-    	var value = event.target.value;
     	// console.log(value);
 
     	switch (event.target.value) {
@@ -120,7 +118,7 @@ class UploadModal extends Component {
 
         return (
             <div className='modal-wrapper'>
-            <a className='hidden-refresh' id='hidden-refresh' href='/myboard'></a>
+            <a className='hidden-refresh' id='hidden-refresh' href='/myboard'>''</a>
             <Popup className='pop-up' trigger={<button className="open-button" id='modal-button'></button>} modal>
 			    {close => (
 			      <div className="modal">
@@ -139,10 +137,10 @@ class UploadModal extends Component {
     			        	<div className='select-wrapper'>
     			        		<select className='option-select' placeholder='Size' onChange={this.handleSize}>
     			        			<option value='' disabled selected default hidden>Choose a size ↓</option>
-    			        			<option value='0'>Tall</option>
-    			        			<option value='1'>Square</option>
-    			        			<option value='2'>Wide</option>
-    			        			<option value='3'>Panorama</option>
+    			        			<option value='0'>Tall (3x4)</option>
+    			        			<option value='1'>Square (1x1)</option>
+    			        			<option value='2'>Wide (4x3)</option>
+    			        			<option value='3'>Panorama (5x1)</option>
     			        		</select>
     			        	</div>
     			        </div>

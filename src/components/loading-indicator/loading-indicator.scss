@@ -7,9 +7,9 @@
 .loading-circle {
 	height: 1.5vw;
 	width: 1.5vw;
-	transform-origin: center 56%;
+	transform-origin: center 56.17%;
 	animation-name: loading-spin;
-	animation-timing-function: ease-in-out;
+	animation-timing-function: ease-out;
 	animation-iteration-count: infinite;
 	animation-duration: 0.7s;
 	backface-visibility: hidden;

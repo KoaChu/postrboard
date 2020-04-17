@@ -1,9 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
 
 import { toggleProfileHidden } from '../../redux/profile/profile-actions';
-import { selectUserImage } from '../../redux/user/user-selectors';
 
 import { ReactComponent as DefaultIcon } from '../../assets/default-user.svg';
 

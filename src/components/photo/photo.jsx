@@ -12,7 +12,6 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
 
   const localUser = JSON.parse(localStorage.getItem('currentUser'));  
   const localUid = localUser.id;
-  const userDocRef = firestore.collection(`users/${localUid}/posts`);
 
   const [imgText, setImgText] = useState('');
   const [imgUid, setImgUid] = useState('');
@@ -28,10 +27,10 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
     imgStyle.top = top;
   }
 
-  const handleClick = event => {
-    onClick(event, { photo, index });
-    // console.log(index);
-  };
+  // const handleClick = event => {
+  //   onClick(event, { photo, index });
+  //   // console.log(index);
+  // };
 
   const onMouseOver = event => {
     // console.log(event.target.parentElement.parentElement.firstElementChild.getAttribute('uid'));
@@ -41,9 +40,9 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
     setImgName(event.target.parentElement.parentElement.firstElementChild.getAttribute('name'));
   };
 
-  const onMouseLeave = event => {
-    setImgUid('');
-  };
+  // const onMouseLeave = event => {
+  //   setImgUid('');
+  // };
 
   const onTrashLikeMouseOver = event => {
     setTrashHovered('trash-like-hovered');
@@ -56,7 +55,7 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
   const handleDelete = (event) => {
     var result = window.confirm('Are you sure?');
 
-    if(result == true){
+    if(result === true){
       setIsDeleting(true);
       var docRef = firestore.doc(`users/${auth.currentUser.uid}/posts/${ imgName }`);
       var mediaDeleteRef = storageRef.child(`${auth.currentUser.uid}/${ imgName }`);
@@ -117,7 +116,7 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
           <span>{imgText}</span>
         </div>
       </div>
-      <a href='/myboard' id='hidden-refresh'></a>
+      <a href='/myboard' id='hidden-refresh'>''</a>
     </div>
   );
 };
