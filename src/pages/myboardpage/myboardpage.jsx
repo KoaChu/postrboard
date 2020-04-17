@@ -129,10 +129,10 @@ class MyBoardPage extends Component {
                                 var newImage = { src: src, height: height, width: width, index: index, text: text, uid: imgUid, name: name };
                                 this.setState({
                                     images: [...this.state.images, newImage],
-                                    hasMore: (this.state.images.length < (this.state.postCount + 1)),
+                                    hasMore: (this.state.images.length < this.state.postCount),
                                     isLoading: false,
                                 });
-                                console.log(postsLeft + ' filename: ' + name);
+                                // console.log(postsLeft + ' filename: ' + name);
                                 // setImages([...images, newImage]);
                                 // console.log(Date.now() + " in getImages function: " + JSON.stringify(this.state.images));
                             });
@@ -144,15 +144,19 @@ class MyBoardPage extends Component {
                             });
                             console.log(err);
                         });
-            console.log('images.length = ' + parseInt(this.state.images.length));
+            // console.log('images.length = ' + parseInt(this.state.images.length));
         }
     }, 100);
 
     render() {
+        console.log('page rerendered');
     	// console.log(Date.now() + " in render: " + JSON.stringify(this.state.images));
         return (
             <div className='myboardpage'> 
 	        	{auth.currentUser && <ImageGallery disabled={false} images={this.state.images} postCount={this.state.postCount} />}
+                {this.state.error && <div>error</div>}
+                {this.state.isLoading && <div>LOADING</div>}
+                {!this.state.hasMore && <div>THE END</div>}
         	</div>
         );
     }

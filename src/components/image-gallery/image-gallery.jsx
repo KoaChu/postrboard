@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Gallery from "react-photo-gallery";
 import Photo from "../photo/photo";
 import arrayMove from "array-move";
