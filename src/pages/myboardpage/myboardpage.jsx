@@ -19,6 +19,7 @@ class MyBoardPage extends Component {
             error: false,
             hasMore: true,
             isLoading: false,
+            someImages: [],
         };
 
         window.onscroll = debounce(() => {
@@ -85,24 +86,42 @@ class MyBoardPage extends Component {
     					.limit(count)
     					.get()
     					.then((snapShot) => {
-    						snapShot.forEach((doc) => {
-    							var data = doc.data();
-    							var src = data.mediaURL;
-    							var height = data.height;
-    							var width = data.width;
-    							var index = data.index;
-    							var text = data.text;
-                                var imgUid = uid;
-                                var name = data.fileName;
-    							var newImage = { src: src, height: height, width: width, index: index, text: text, uid: imgUid, name: name };
-    							this.setState({
-    								images: [...this.state.images, newImage],
-                                    hasMore: (this.state.images.length < (this.state.postCount + 1)),
-                                    isLoading: false,
-    							});
-    							// setImages([...images, newImage]);
-    							// console.log(Date.now() + " in getImages function: " + JSON.stringify(this.state.images));
-    						});
+                            const nextImages = snapShot.docs.map(doc => ({
+                                src: doc.data().mediaURL,
+                                height: doc.data().height,
+                                width: doc.data().width,
+                                index: doc.data().index,
+                                text: doc.data().text,
+                                imguid: uid,
+                                name: doc.data().fileName,
+                                key: doc.data().fileName,
+                            }));
+                            this.setState({
+                                images: this.state.images.concat(nextImages),
+                                hasMore: (this.state.images.length < (this.state.postCount + 1)),
+                                isLoading: false,
+                             });
+                            // console.log(JSON.stringify(this.state.someImages));
+    						// snapShot.forEach((doc) => {
+    						// 	var data = doc.data();
+    						// 	var src = data.mediaURL;
+    						// 	var height = data.height;
+    						// 	var width = data.width;
+    						// 	var index = data.index;
+    						// 	var text = data.text;
+          //                       var imgUid = uid;
+          //                       var name = data.fileName;
+          //                       var key = data.fileName;
+    						// 	var newImage = { src: src, height: height, width: width, index: index, text: text, uid: imgUid, name: name, key: key };
+    						// 	this.setState({
+    						// 		images: [...this.state.images, newImage],
+          //                           hasMore: (this.state.images.length < (this.state.postCount + 1)),
+          //                           isLoading: false,
+    						// 	});
+    						// 	// setImages([...images, newImage]);
+    						// 	// console.log(Date.now() + " in getImages function: " + JSON.stringify(this.state.images));
+    						// });
+          //                   console.log(JSON.stringify(this.state.images));
     					})
     					.catch((err) => {
                             this.setState({
@@ -117,25 +136,40 @@ class MyBoardPage extends Component {
                         .limit(count)
                         .get()
                         .then((snapShot) => {
-                            snapShot.forEach((doc) => {
-                                var data = doc.data();
-                                var src = data.mediaURL;
-                                var height = data.height;
-                                var width = data.width;
-                                var index = data.index;
-                                var text = data.text;
-                                var imgUid = uid;
-                                var name = data.fileName;
-                                var newImage = { src: src, height: height, width: width, index: index, text: text, uid: imgUid, name: name };
-                                this.setState({
-                                    images: [...this.state.images, newImage],
-                                    hasMore: (this.state.images.length < this.state.postCount),
-                                    isLoading: false,
-                                });
-                                // console.log(postsLeft + ' filename: ' + name);
-                                // setImages([...images, newImage]);
-                                // console.log(Date.now() + " in getImages function: " + JSON.stringify(this.state.images));
-                            });
+                            const nextImages = snapShot.docs.map(doc => ({
+                                src: doc.data().mediaURL,
+                                height: doc.data().height,
+                                width: doc.data().width,
+                                index: doc.data().index,
+                                text: doc.data().text,
+                                imguid: uid,
+                                name: doc.data().fileName,
+                                key: doc.data().fileName,
+                            }));
+                            this.setState({
+                                images: this.state.images.concat(nextImages),
+                                hasMore: (this.state.images.length < (this.state.postCount + 1)),
+                                isLoading: false,
+                             });
+                            // snapShot.forEach((doc) => {
+                            //     var data = doc.data();
+                            //     var src = data.mediaURL;
+                            //     var height = data.height;
+                            //     var width = data.width;
+                            //     var index = data.index;
+                            //     var text = data.text;
+                            //     var imgUid = uid;
+                            //     var name = data.fileName;
+                            //     var newImage = { src: src, height: height, width: width, index: index, text: text, uid: imgUid, name: name };
+                            //     this.setState({
+                            //         images: [...this.state.images, newImage],
+                            //         hasMore: (this.state.images.length < this.state.postCount),
+                            //         isLoading: false,
+                            //     });
+                            //     // console.log(postsLeft + ' filename: ' + name);
+                            //     // setImages([...images, newImage]);
+                            //     // console.log(Date.now() + " in getImages function: " + JSON.stringify(this.state.images));
+                            // });
                         })
                         .catch((err) => {
                             this.setState({
@@ -153,7 +187,7 @@ class MyBoardPage extends Component {
     	// console.log(Date.now() + " in render: " + JSON.stringify(this.state.images));
         return (
             <div className='myboardpage'> 
-	        	{auth.currentUser && <ImageGallery disabled={false} images={this.state.images} postCount={this.state.postCount} />}
+	        	{auth.currentUser &&  <ImageGallery disabled={false} images={this.state.images} postCount={this.state.postCount} />}
                 {this.state.error && <div>error</div>}
                 {this.state.isLoading && <div>LOADING</div>}
                 {!this.state.hasMore && <div>THE END</div>}

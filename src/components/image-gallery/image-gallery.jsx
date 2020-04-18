@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Gallery from "react-photo-gallery";
 import Photo from "../photo/photo";
 import arrayMove from "array-move";
@@ -28,9 +28,13 @@ const ImageGallery = ({ disabled, images, postCount }) => {
 		// console.log("USE EFFECT CALLED" + JSON.stringify(items));
 	},[images]);
 
+  const addItems = useCallback((images) => {
+    setItems(images);
+  },[]);
+
 
     const onSortEnd = ({ oldIndex, newIndex }) => {
-      setItems(arrayMove(items, oldIndex, newIndex));
+      addItems(arrayMove(items, oldIndex, newIndex));
 
       var newDBIndex = postCount - newIndex;
       var oldDBIndex = postCount - oldIndex;

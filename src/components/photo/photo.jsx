@@ -1,8 +1,11 @@
 import React, { useState } from "react";
-
 import { firestore, auth, onDeleteIndexes, storageRef } from '../../firebase/firebase-utils';
 
+import LoadingIndicator from '../loading-indicator/loading-indicator';
+
 import { ReactComponent as Trash } from '../../assets/trash.svg';
+import { ReactComponent as PreLike } from '../../assets/pre-like.svg';
+import { ReactComponent as Like } from '../../assets/like.svg';
 
 import './photo.scss';
 
@@ -14,7 +17,7 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
   const localUid = localUser.id;
 
   const [imgText, setImgText] = useState('');
-  const [imgUid, setImgUid] = useState('');
+  const [imguid, setImgUid] = useState('');
   const [trashHovered, setTrashHovered] = useState('');
   const [imgName, setImgName] = useState('');
   const [imgIndex, setImgIndex] = useState(0);
@@ -35,7 +38,7 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
   const onMouseOver = event => {
     // console.log(event.target.parentElement.parentElement.firstElementChild.getAttribute('uid'));
     setImgText(event.target.parentElement.parentElement.firstElementChild.getAttribute('text'));
-    setImgUid(event.target.parentElement.parentElement.firstElementChild.getAttribute('uid'));
+    setImgUid(event.target.parentElement.parentElement.firstElementChild.getAttribute('imguid'));
     setImgIndex(event.target.parentElement.parentElement.firstElementChild.getAttribute('index'));
     setImgName(event.target.parentElement.parentElement.firstElementChild.getAttribute('name'));
   };
@@ -90,7 +93,7 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
 
   return (
     <div className='container'>
-      {isDeleting ? <div>deleting...</div> :
+      {isDeleting ? <LoadingIndicator id='deleting-indicator' loadingText='Removing' /> :
       <img
         style={onClick ? { ...imgStyle, ...imgWithClick } : imgStyle}
         {...photo}
@@ -98,7 +101,7 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
         alt="img"
         id='inside-img'
       />}
-      {imgUid === localUid ? 
+      {imguid === localUid ? 
         <span onMouseOver={onTrashLikeMouseOver} 
               onMouseOut={onTrashLikeMouseOut} 
               onClick={handleDelete}
@@ -109,7 +112,7 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
         <span onMouseOver={onTrashLikeMouseOver} 
               onMouseOut={onTrashLikeMouseOut} 
               className={`${trashHovered} trash-like`}>
-              like
+              <PreLike className='trash-like' />
         </span>}
       <div onMouseEnter={onMouseOver} className='overlay'>
         <div className='overlay-text'>
