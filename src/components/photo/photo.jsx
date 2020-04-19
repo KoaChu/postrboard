@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { firestore, auth, onDeleteIndexes, storageRef } from '../../firebase/firebase-utils';
+import { firestore, auth, onDeleteIndexes, storageRef, userLikeColl } from '../../firebase/firebase-utils';
 
 import LoadingIndicator from '../loading-indicator/loading-indicator';
 
@@ -22,6 +22,8 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
   const [imgName, setImgName] = useState('');
   const [imgIndex, setImgIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [liked, setLiked] = useState(false);
+  const [permLike, setPermLike] = useState(false);
 
   const imgStyle = { margin: margin };
   if (direction === "column") {
@@ -37,6 +39,37 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
 
   const onMouseOver = event => {
     // console.log(event.target.parentElement.parentElement.firstElementChild.getAttribute('uid'));
+    // if(userLikeColl) {
+    //   if(userLikeColl.includes(event.target.parentElement.parentElement.firstElementChild.getAttribute('name'))) {
+    //     setPermLike(true);
+    //   }
+    // }
+    // const test = userLikeColl();
+    // console.log(test);
+    const userLikesRef = firestore.collection(`users/${auth.currentUser.uid}/likes`);
+    const imgRef = event.target.parentElement.parentElement.firstElementChild.getAttribute('name');
+    
+    userLikesRef.get()
+                .then((snap) => {
+                  if(snap.size===0) {
+                    return;
+                  } else {
+                    const userLikes = snap.docs.map(like => (
+                      like.id
+                    ));
+
+                    if(userLikes.includes(imgRef)) {
+                      setPermLike(true);
+                    } else {
+                      return;
+                    }
+                    // console.log(userLikes);
+                  }
+                })
+                .catch((err) =>{
+                  console.log(err.message);
+                });
+
     setImgText(event.target.parentElement.parentElement.firstElementChild.getAttribute('text'));
     setImgUid(event.target.parentElement.parentElement.firstElementChild.getAttribute('imguid'));
     setImgIndex(event.target.parentElement.parentElement.firstElementChild.getAttribute('index'));
@@ -47,12 +80,35 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
   //   setImgUid('');
   // };
 
-  const onTrashLikeMouseOver = event => {
+  const onTrashMouseOver = event => {
     setTrashHovered('trash-like-hovered');
   };
 
-  const onTrashLikeMouseOut = event => {
+  const onTrashMouseOut = event => {
     setTrashHovered('');
+  };
+
+  const onLikeMouseOver = event => {
+    setTrashHovered('trash-like-hovered');
+    setLiked(true);
+  };
+
+  const onLikeMouseOut = event => {
+    setTrashHovered('');
+    setLiked(false);
+  };
+
+  const handleLike = event => {
+    const userLikeRef = firestore.doc(`users/${auth.currentUser.uid}/likes/${imgName}`);
+
+    if(permLike) {
+      firestore.doc(`users/${auth.currentUser.uid}/likes/${ imgName }`).delete();
+    } else {
+      userLikeRef.set({
+        createdAt: new Date(),
+      })
+    }
+    setPermLike(!permLike);
   };
 
   const handleDelete = (event) => {
@@ -93,6 +149,12 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
 
   return (
     <div className='container'>
+      {permLike ? 
+        <span className={`${trashHovered} trash-like`}>
+          <Like className='trash-like' />
+        </span>
+        : null
+      }
       {isDeleting ? <LoadingIndicator id='deleting-indicator' loadingText='Removing' /> :
       <img
         style={onClick ? { ...imgStyle, ...imgWithClick } : imgStyle}
@@ -102,15 +164,16 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
         id='inside-img'
       />}
       {imguid === localUid ? 
-        <span onMouseOver={onTrashLikeMouseOver} 
-              onMouseOut={onTrashLikeMouseOut} 
+        <span onMouseOver={onTrashMouseOver} 
+              onMouseOut={onTrashMouseOut} 
               onClick={handleDelete}
               className={`${trashHovered} trash-like`}>
               <Trash className={`${trashHovered} trash-like`}/>
         </span> 
         : 
-        <span onMouseOver={onTrashLikeMouseOver} 
-              onMouseOut={onTrashLikeMouseOut} 
+        <span onMouseOver={onLikeMouseOver} 
+              onMouseOut={onLikeMouseOut} 
+              onClick={handleLike}
               className={`${trashHovered} trash-like`}>
               <PreLike className='trash-like' />
         </span>}

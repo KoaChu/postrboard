@@ -296,6 +296,25 @@ const config = {
               });
   };
 
+  // export const userLikeColl = () => {
+  //   if(firestore.collection(`users/${auth.currentUser.uid}/likes`)) {
+  //     const userLikesRef = firestore.collection(`users/${auth.currentUser.uid}/likes`);
+
+  //     userLikesRef.get()
+  //                 .then((snapshot) => {
+  //                   const likesList = snapshot.docs.map(doc => ({
+  //                     postId: doc.data().fileName,
+  //                   }));
+  //                   return likesList;
+  //                 })
+  //                 .catch((err) => {
+  //                   console.log(err.message);
+  //                 });
+  //   } else {
+  //     return false;
+  //   }
+  // };
+
   export const actionCodeSettings = {
     url: 'http://localhost:3000/'
   };
