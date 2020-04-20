@@ -6,6 +6,7 @@ import LoadingIndicator from '../loading-indicator/loading-indicator';
 import { ReactComponent as Trash } from '../../assets/trash.svg';
 import { ReactComponent as PreLike } from '../../assets/pre-like.svg';
 import { ReactComponent as Like } from '../../assets/like.svg';
+import { ReactComponent as Notes } from '../../assets/notes.svg';
 
 import './photo.scss';
 
@@ -19,6 +20,7 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
   const [imgText, setImgText] = useState('');
   const [imguid, setImgUid] = useState('');
   const [trashHovered, setTrashHovered] = useState('');
+  const [notesHovered, setNotesHovered] = useState('');
   const [imgName, setImgName] = useState('');
   const [imgIndex, setImgIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -91,6 +93,18 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
   const onLikeMouseOut = event => {
     setTrashHovered('');
     // setLiked(false);
+  };
+
+  const onNotesMouseOver = event => {
+    setNotesHovered('notes-hovered');
+  };
+
+  const onNotesMouseOut = event => {
+    setNotesHovered('');
+  };
+
+  const onNotesClick = event => {
+    console.log('notes-clicked');
   };
 
   const handleLike = event => {
@@ -167,7 +181,14 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
         alt="img"
         id='inside-img'
       />}
-      {imguid === false ? 
+      <span className={`${notesHovered} notes`}
+            onMouseOver={onNotesMouseOver}
+            onMouseOut={onNotesMouseOut}
+            onClick={onNotesClick}
+            >
+        <Notes className={`${notesHovered} inner-notes`} />
+      </span>
+      {imguid === localUid ? 
         <span onMouseOver={onTrashMouseOver} 
               onMouseOut={onTrashMouseOut} 
               onClick={handleDelete}
