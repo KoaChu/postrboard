@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { firestore, auth, onDeleteIndexes, storageRef, userLikeColl } from '../../firebase/firebase-utils';
+import { firestore, auth, onDeleteIndexes, storageRef } from '../../firebase/firebase-utils';
 
 import LoadingIndicator from '../loading-indicator/loading-indicator';
 
@@ -22,7 +22,7 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
   const [imgName, setImgName] = useState('');
   const [imgIndex, setImgIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [liked, setLiked] = useState(false);
+  // const [liked, setLiked] = useState(false);
   const [permLike, setPermLike] = useState(false);
 
   const imgStyle = { margin: margin };
@@ -37,27 +37,27 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
   //   // console.log(index);
   // };
 
-  const onMouseOver = event => {
-    // console.log(event.target.parentElement.parentElement.firstElementChild.getAttribute('uid'));
-    // if(userLikeColl) {
-    //   if(userLikeColl.includes(event.target.parentElement.parentElement.firstElementChild.getAttribute('name'))) {
-    //     setPermLike(true);
-    //   }
-    // }
-    // const test = userLikeColl();
-    // console.log(test);
+  const onMouseOver = async (event) => {
+    // console.log(event.target.parentElement.parentElement.firstElementChild.getAttribute('name'));
+
+    setImgText(event.target.parentElement.parentElement.firstElementChild.getAttribute('text'));
+    setImgUid(event.target.parentElement.parentElement.firstElementChild.getAttribute('imguid'));
+    setImgIndex(event.target.parentElement.parentElement.firstElementChild.getAttribute('index'));
+    setImgName(event.target.parentElement.parentElement.firstElementChild.getAttribute('name'));
+
     const userLikesRef = firestore.collection(`users/${auth.currentUser.uid}/likes`);
-    const imgRef = event.target.parentElement.parentElement.firstElementChild.getAttribute('name');
+    const imgRef = await event.target.parentElement.parentElement.firstElementChild.getAttribute('name');
     
     userLikesRef.get()
                 .then((snap) => {
+                  // console.log(imgRef);
                   if(snap.size===0) {
                     return;
                   } else {
                     const userLikes = snap.docs.map(like => (
                       like.id
                     ));
-
+                    // console.log(userLikes + ' includes ' + imgRef);
                     if(userLikes.includes(imgRef)) {
                       setPermLike(true);
                     } else {
@@ -69,11 +69,6 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
                 .catch((err) =>{
                   console.log(err.message);
                 });
-
-    setImgText(event.target.parentElement.parentElement.firstElementChild.getAttribute('text'));
-    setImgUid(event.target.parentElement.parentElement.firstElementChild.getAttribute('imguid'));
-    setImgIndex(event.target.parentElement.parentElement.firstElementChild.getAttribute('index'));
-    setImgName(event.target.parentElement.parentElement.firstElementChild.getAttribute('name'));
   };
 
   // const onMouseLeave = event => {
@@ -90,19 +85,28 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
 
   const onLikeMouseOver = event => {
     setTrashHovered('trash-like-hovered');
-    setLiked(true);
+    // setLiked(true);
   };
 
   const onLikeMouseOut = event => {
     setTrashHovered('');
-    setLiked(false);
+    // setLiked(false);
   };
 
   const handleLike = event => {
     const userLikeRef = firestore.doc(`users/${auth.currentUser.uid}/likes/${imgName}`);
+    const imgRef = event.target.parentElement.parentElement.firstChild.nextSibling.getAttribute('name');
 
     if(permLike) {
-      firestore.doc(`users/${auth.currentUser.uid}/likes/${ imgName }`).delete();
+      // console.log(imgRef);
+      firestore.doc(`users/${auth.currentUser.uid}/likes/${ imgRef }`)
+                .delete()
+                .then(() => {
+                  // console.log('deleted');
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
     } else {
       userLikeRef.set({
         createdAt: new Date(),
@@ -163,7 +167,7 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
         alt="img"
         id='inside-img'
       />}
-      {imguid === localUid ? 
+      {imguid === false ? 
         <span onMouseOver={onTrashMouseOver} 
               onMouseOut={onTrashMouseOut} 
               onClick={handleDelete}
