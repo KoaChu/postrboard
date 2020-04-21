@@ -15,10 +15,10 @@ const CommentModal = ({ imgSrc }) => {
 	        </div>
         	<a class="comment-close" href='#'>&times;</a>
         	<div className='comment-image'>
-        		<img src={imgSrc} alt='post-image' />
+        		<img src={imgSrc} alt='post-image' className='notes-image'/>
         	</div>
         	<div className='comment-area'>
-        		<span className='comment-header'>@Username</span>
+        		<span className='comment-header'>@posterUserName</span>
         		<div className='comments'>
 
         		</div>

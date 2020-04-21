@@ -321,6 +321,8 @@ class UploadModal extends Component {
 					        width: 0
 			              });
 			              close();
+                          document.getElementById('hidden-refresh').click();
+                          // window.scrollTo(0,50);
 			            }}
 			          >
 			            Cancel

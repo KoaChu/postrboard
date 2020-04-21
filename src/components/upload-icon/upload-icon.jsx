@@ -7,6 +7,7 @@ import UploadModal from '../upload-modal/upload-modal';
 import './upload-icon.scss';
 
 const UploadIcon = () => {
+
     return (
         <div className='upload-icon'>
         	<Icon className='icon' onClick={ () => {

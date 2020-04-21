@@ -1,3 +1,7 @@
+.notes-modal {
+	position: fixed;
+}
+
 .comment-modal {
 	z-index: 9999;
 	background-color: black;
@@ -27,14 +31,14 @@
 .comment-close {
   cursor: pointer;
   z-index: 99999;
-  position: absolute;
+  position: fixed;
   display: block;
   color: white;
   padding: 5px;
   line-height: 2vw;
   padding-top: 0;
-  right: 8.37vw;
-  top: 2.96vw;
+  right: 10.7%;
+  top: 17.5%;
   font-size: 2.4vw;
   height: 2vw;
   background: maroon;
@@ -48,15 +52,28 @@
 }
 
 .comment-image {
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	border: 1px solid black;
-	background-color: #555;
+	background-color: transparent;
 	z-index: 9999;
 	position: fixed;
-	height: 60%;
-	width: 45%;
-	margin-left: 10vw;
-	left: 0;
-	transform: translate(5.5%, 10%);
+	height: 35vw;
+	width: 50vw;
+	// margin-left: 10vw;
+	left: 9.4%;
+	top: 17.3%;
+	// border: 1px solid red;
+	// transform: translate(-132.5%, 9%);
+}
+
+.notes-image {
+	width: auto;
+	height: auto;
+	max-width: 100%;
+	max-height: 100%;
+	display: block;
 }
 
 .comments {
@@ -64,22 +81,22 @@
 	z-index: 9999;
 	position: fixed;
 	border: 1px solid black;
-	height: 80%;
-	width: 96%;
-	margin-left: 0.5vw;
+	height: 57%;
+	width: 28.78%;
+	margin-left: 0.48vw;
 	margin-top: 2.5vw;
 }
 
 .comment-header {
-	// border-bottom:1px solid black;
+	// border:1px solid red;
 	z-index: 99999;
 	background-color: transparent;
-	font-weight: bold;
+	// font-weight: bold;
 	font-size: 1.1vw;
-	position: absolute;
+	position: fixed;
 	opacity: 1;
-	width: 100%;
-	height: 7%;
+	width: 29%;
+	height: 4%;
 	display: flex;
 	margin-top: 0.25vw;
 	justify-content: center;
@@ -94,11 +111,13 @@
 	background-color: white;
 	position: fixed;
 	opacity: 1;
-	height: 60%;
-	width: 30%;
-	// top: 0%;
-	left: 0;
-	transform: translate(191.5%, 10%);
+	height: 35vw;
+	width: 30vw;
+	right: 10.6%;
+	// top: 0;
+	bottom: 12.3%;
+	// left: 0;
+	// transform: translate(112.5%, 109%);
 }
 
 #note-button {
@@ -113,7 +132,7 @@
 
 .note-text {
 	display: flex;
-	position: relative;
+	position: absolute;
 	background: transparent;
 	resize: none;
 	font-size: 0.9vw;

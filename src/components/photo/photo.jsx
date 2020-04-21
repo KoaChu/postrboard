@@ -24,6 +24,7 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
   const [notesHovered, setNotesHovered] = useState('');
   const [imgName, setImgName] = useState('');
   const [imgIndex, setImgIndex] = useState(0);
+  const [imgSrc, setImgSrc] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
   // const [liked, setLiked] = useState(false);
   const [permLike, setPermLike] = useState(false);
@@ -48,6 +49,7 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
     setImgUid(event.target.parentElement.parentElement.firstElementChild.getAttribute('imguid'));
     setImgIndex(event.target.parentElement.parentElement.firstElementChild.getAttribute('index'));
     setImgName(event.target.parentElement.parentElement.firstElementChild.getAttribute('name'));
+    setImgSrc(event.target.parentElement.parentElement.firstElementChild.getAttribute('src'));
 
     const userLikesRef = firestore.collection(`users/${auth.currentUser.uid}/likes`);
     const imgRef = await event.target.parentElement.parentElement.firstElementChild.getAttribute('name');
@@ -211,7 +213,7 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
         </div>
       </div>
       <span className={`${showComments} cm`}>
-        <CommentModal className={`${showComments} comment-modal`}/>
+        <CommentModal className={`${showComments} comment-modal`} imgSrc={ imgSrc }/>
       </span>
       <a href='/myboard' id='hidden-refresh'>''</a>
     </div>
