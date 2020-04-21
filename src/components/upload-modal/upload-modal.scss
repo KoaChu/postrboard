@@ -43,6 +43,7 @@
   text-decoration: underline;
 }
 .modal .content-wrapper {
+  // border: 1px solid red;
   display: flex;
   flex-grow: 2;
   justify-content: space-between;
@@ -148,8 +149,10 @@
 }
 
 .image-preview {
-  width: 45%;
-  height: 52%;
+  width: auto;
+  height: auto;
+  max-width: 22.5vw;
+  max-height: 12.85vw;
   position: absolute;
   user-select: none;
   margin: -0.6em 0em;
