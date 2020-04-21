@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { firestore, auth, onDeleteIndexes, storageRef } from '../../firebase/firebase-utils';
 
 import LoadingIndicator from '../loading-indicator/loading-indicator';
+import CommentModal from '../comment-modal/comment-modal';
 
 import { ReactComponent as Trash } from '../../assets/trash.svg';
 import { ReactComponent as PreLike } from '../../assets/pre-like.svg';
@@ -26,6 +27,7 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
   const [isDeleting, setIsDeleting] = useState(false);
   // const [liked, setLiked] = useState(false);
   const [permLike, setPermLike] = useState(false);
+  const [showComments, setShowComments] = useState('');
 
   const imgStyle = { margin: margin };
   if (direction === "column") {
@@ -104,6 +106,7 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
   };
 
   const onNotesClick = event => {
+    setShowComments('comments-visible');
     console.log('notes-clicked');
   };
 
@@ -207,6 +210,9 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
           <span>{imgText}</span>
         </div>
       </div>
+      <span className={`${showComments} cm`}>
+        <CommentModal className={`${showComments} comment-modal`}/>
+      </span>
       <a href='/myboard' id='hidden-refresh'>''</a>
     </div>
   );

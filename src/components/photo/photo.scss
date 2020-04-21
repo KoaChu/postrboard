@@ -125,6 +125,18 @@ img {
     transition: transform 6s cubic-bezier(0.25, 0.45, 0.45, 0.95);
 }
 
+.cm {
+	position: absolute;
+	z-index: 9999;
+	border: 1px solid red;
+	display: none;
+}
+.comments-visible {
+	opacity: 1;
+	display: initial;
+	background-color: black;
+}
+
 #hidden-refresh {
 	user-select: none;
 	pointer-events: none;

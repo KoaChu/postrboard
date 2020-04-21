@@ -1,0 +1,82 @@
+.comment-modal {
+	z-index: 9999;
+	background-color: black;
+	opacity: 0.9;
+	position: fixed;
+	display: flex;
+	overflow: auto;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	padding-top: 1vw;
+	padding-left: 9vw;
+}
+
+.notes-icon {
+	transform: scale(0.15) translate(-269%, -240%);
+	user-select: none;
+	pointer-events: none;
+	z-index: 9999;
+}
+
+.hidden {
+	display: none;
+}
+
+.comment-close {
+  cursor: pointer;
+  z-index: 9999;
+  position: absolute;
+  display: block;
+  color: white;
+  padding: 05px;
+  line-height: 2vw;
+  padding-top: 0;
+  right: 17.5vw;
+  top: 6.9vw;
+  font-size: 2rem;
+  height: 2vw;
+  background: maroon;
+  border-radius: 50%;
+  border: 2px solid black;
+}
+
+.comment-image {
+	border: 1px solid red;
+	background-color: #555;
+	height: 70%;
+	width: 50%;
+	top: -50%;
+	left: -50%;
+	transform: translate(20%, 20%);
+}
+
+.comments {
+	background-color: white;
+	border-bottom: 2px solid black;
+	height: 80%;
+	margin-top: 0.5vw;
+}
+
+.comment-header {
+	border-bottom:2px solid black;
+	background-color: transparent;
+	font-weight: bolder;
+	opacity: 1;
+	height: 100%;
+	width: 100%;
+	padding-left: 5vw;
+	padding-right: 5vw;
+	margin-left: 3vw;
+}
+.comment-area {
+	border: 1px solid black;
+	background-color: white;
+	opacity: 1;
+	height: 70%;
+	width: 20%;
+	top: -50%;
+	left: -50%;
+	transform: translate(50%, 20%);
+}
