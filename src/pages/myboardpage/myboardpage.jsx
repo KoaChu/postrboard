@@ -183,7 +183,7 @@ class MyBoardPage extends Component {
     }, 100);
 
     render() {
-        console.log('page rerendered');
+        // console.log('page rerendered');
     	// console.log(Date.now() + " in render: " + JSON.stringify(this.state.images));
         return (
             <div className='myboardpage'> 

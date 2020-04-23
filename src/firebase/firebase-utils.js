@@ -325,6 +325,7 @@ const config = {
   export const firestore = firebase.firestore();
   export const storageRef = firebase.storage().ref();
   export const firebaseStorage = firebase.storage;
+  export const firebaseFirestore = firebase.firestore;
 
 
   export default firebase;

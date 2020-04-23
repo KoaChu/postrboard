@@ -29,6 +29,7 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
   // const [liked, setLiked] = useState(false);
   const [permLike, setPermLike] = useState(false);
   const [showComments, setShowComments] = useState('');
+  const [renderNotes, setRenderNotes] = useState(false);
 
   const imgStyle = { margin: margin };
   if (direction === "column") {
@@ -109,7 +110,8 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
 
   const onNotesClick = event => {
     setShowComments('comments-visible');
-    console.log('notes-clicked');
+    setRenderNotes(true);
+    // console.log('notes-clicked');
   };
 
   const handleLike = event => {
@@ -212,9 +214,11 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
           <span>{imgText}</span>
         </div>
       </div>
+      {renderNotes &&
       <span className={`${showComments} cm`}>
-        <CommentModal className={`${showComments} comment-modal`} imgSrc={ imgSrc }/>
+        <CommentModal className={`${showComments} comment-modal`} imgSrc={imgSrc} imgName={imgName} imgUid={imguid} />
       </span>
+      }
       <a href='/myboard' id='hidden-refresh'>''</a>
     </div>
   );

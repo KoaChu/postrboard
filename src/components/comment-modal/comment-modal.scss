@@ -133,7 +133,7 @@
 .note-text {
 	display: flex;
 	position: absolute;
-	background: transparent;
+	background: #f8f8f8;
 	resize: none;
 	font-size: 0.9vw;
 	align-items: center;
@@ -143,13 +143,14 @@
 	padding-left: 0.4vw;
 	margin: 0.1vw;
 	overflow: scroll;
-	// border: 1px solid red;
+	border: 1px solid black;
 	width: 99%;
 	height: 91%;
 }
 
 .note-input {
 	border: 1px solid black;
+	background-color: transparent;
 	width: 70%;
 	height: 7.5%;
 	margin: 0.5vw;
