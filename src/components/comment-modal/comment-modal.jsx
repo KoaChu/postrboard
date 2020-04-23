@@ -27,7 +27,7 @@ class CommentModal extends Component {
 
     componentDidMount() {
     	this.fetchNotes();
-    	console.log('notes fetched');
+    	// console.log('notes fetched');
     };
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -130,7 +130,7 @@ class CommentModal extends Component {
 	};
 
     render() {
-    	console.log('rendered...notes: ' + JSON.stringify(this.state.notes) + 'imgName: ' + this.state.imgName);
+    	// console.log('rendered...notes: ' + JSON.stringify(this.state.notes) + 'imgName: ' + this.state.imgName);
 
     	const {
 	      error,
@@ -158,15 +158,17 @@ class CommentModal extends Component {
 	        							src={note.imageUrl}
 	        							style={{
 							                  borderRadius: '50%',
-							                  height: 72,
-							                  marginRight: 20,
-							                  width: 72,
+							                  border: '1px solid black',
+							                  height: 20,
+							                  marginRight: 5,
+							                  marginLeft: 8,
+							                  width: 20,
 							                }}
 							        />
 							        <div>
-							        	<h2 style={{marginTop: 0}}>
+							        	<h5 style={{marginTop: 1}}>
 							        		@{note.displayName}
-							        	</h2>
+							        	</h5>
 							        	<p>
 							        		{note.text}
 							        	</p>
