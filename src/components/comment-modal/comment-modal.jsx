@@ -166,20 +166,45 @@ class CommentModal extends Component {
 							                }}
 							        />
 							        <div>
-							        	<h5 style={{marginTop: 1}}>
+							        	<h5 style={{marginTop: '0.01vw'}}>
 							        		@{note.displayName}
 							        	</h5>
-							        	<p>
+							        	<p style={{marginTop: '-1.5vw',
+							        			marginRight: '1vw',
+							        			'text-align': 'left'
+							        			}}>
 							        		{note.text}
 							        	</p>
+							        	<p style={{fontSize: '0.8vw',
+							        			fontStyle: 'italic',
+							        			color: '#777',
+							        			marginTop: '-1vw',
+							        			marginBottom: '0vw'
+							        	}}>
+							        		{note.createdAt.toDate().toDateString()}
+							        	</p>
 							        </div>
+	        						{(JSON.parse(localStorage.getItem('currentUser')).id == this.props.imgUid) 
+	        						|| (JSON.parse(localStorage.getItem('currentUser')).id == note.uid)
+	        						? <span className='note-delete' 
+	        								style={{color: 'maroon',
+	        										position: 'absolute',
+	        										right: '5%',
+	        										'align-content': 'flex-end',
+	        										padding: 0,
+	        										}}
+	        							>
+	        							&times;
+	        						  </span>
+	        						: null
+	        						}
 	        					</div>
 	        				</Fragment>
 	        			))}
 	        			<hr />
 	        		</div>
 	        		<div className='note-input' id='note-input'>
-	    				<textarea ref={this.textAreaRef} className='note-text' id='note-text' rows={1} type='text' placeholder='Post a note...' onChange={this.handleNoteText} required />
+	    				<textarea ref={this.textAreaRef} className='note-text' id='note-text' maxlength={2000} rows={1} type='text' placeholder='Post a note...' onChange={this.handleNoteText} required />
 	        		</div>
 	        		<CustomButton id='note-button' onClick={this.handlePost}>Post</CustomButton>
 	        	</div>
