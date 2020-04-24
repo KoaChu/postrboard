@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { firestore, firebaseFirestore } from '../../firebase/firebase-utils';
+import debounce from 'lodash.debounce';
 
 import CustomButton from '../custom-button/custom-button';
 
@@ -22,6 +23,8 @@ class CommentModal extends Component {
         	isLoading: true,
         	hasMore: true,
         	noteText: '',
+        	lastCreatedAt: '',
+        	lastText: '',
         }
     }
 
@@ -31,7 +34,7 @@ class CommentModal extends Component {
     };
 
     shouldComponentUpdate(nextProps, nextState) {
-    	return nextProps.imgName == this.props.imgName;
+    	return nextProps.imgName === this.props.imgName;
     };
 
     handleNoteText = (event) => {
@@ -39,6 +42,18 @@ class CommentModal extends Component {
     		noteText: event.target.value,
     	});
     };
+
+    handleScroll = debounce((event) => {
+    	const divRef = document.getElementById('comments');
+
+    	// console.log('scrollHeight: ' + divRef.scrollHeight + 'scrollTop: ' + divRef.scrollTop + 'clientHeight: ' + divRef.clientHeight);
+    	if(this.state.error || this.state.isLoading || !this.state.hasMore) return;
+
+    	if(divRef.scrollTop + divRef.clientHeight === divRef.scrollHeight) {
+    		// console.log('bottom reached');
+    		this.fetchNotes();
+    	}
+    }, 100);
 
     handlePost = () => {
 		// console.log('handled post');
@@ -107,9 +122,13 @@ class CommentModal extends Component {
 		const notesRef = firestore.collection(`users/${this.props.imgUid}/posts/${this.props.imgName}/notes`);
 
 		notesRef.orderBy('createdAt', 'desc')
+				.orderBy('text')
+				.startAfter(this.state.lastCreatedAt, this.state.lastText)
 				.limit(10)
 				.get()
 				.then((snapshot) => {
+					const last = snapshot.docs[snapshot.docs.length - 1];
+
 					const nextNotes = snapshot.docs.map(doc => ({
 						displayName: doc.data().displayName,
 						imageUrl: doc.data().imageUrl,
@@ -121,8 +140,11 @@ class CommentModal extends Component {
 
 					this.setState({
 						notes: this.state.notes.concat(nextNotes),
-						isLoading: false
+						isLoading: false,
+						lastCreatedAt: last.data().createdAt,
+						lastText: last.data().text,
 					});
+	    			// console.log(this.state.isLoading);
 				})
 				.catch((err) => {
 					console.log(err.message);
@@ -143,13 +165,13 @@ class CommentModal extends Component {
             <div className='notes-modal'>
 		        <div className='comment-modal'>
 		        </div>
-	        	<a class="comment-close" href='#'>&times;</a>
+	        	<a className="comment-close" href='#'>&times;</a>
 	        	<div className='comment-image'>
-	        		<img src={this.props.imgSrc} alt='post-image' className='notes-image'/>
+	        		<img src={this.props.imgSrc} alt='image' className='notes-image'/>
 	        	</div>
 	        	<div className='comment-area'>
 	        		<span className='comment-header'>@posterUserName</span>
-	        		<div className='comments'>
+	        		<div className='comments' id='comments' onScroll={this.handleScroll}>
 	        			{notes.map(note => (
 	        				<Fragment key={note.noteId}>
 	        					<hr />
@@ -171,7 +193,7 @@ class CommentModal extends Component {
 							        	</h5>
 							        	<p style={{marginTop: '-1.5vw',
 							        			marginRight: '1vw',
-							        			'text-align': 'left'
+							        			'textAlign': 'left'
 							        			}}>
 							        		{note.text}
 							        	</p>
@@ -184,13 +206,13 @@ class CommentModal extends Component {
 							        		{note.createdAt.toDate().toDateString()}
 							        	</p>
 							        </div>
-	        						{(JSON.parse(localStorage.getItem('currentUser')).id == this.props.imgUid) 
-	        						|| (JSON.parse(localStorage.getItem('currentUser')).id == note.uid)
+	        						{(JSON.parse(localStorage.getItem('currentUser')).id === this.props.imgUid) 
+	        						|| (JSON.parse(localStorage.getItem('currentUser')).id === note.uid)
 	        						? <span className='note-delete' 
 	        								style={{color: 'maroon',
 	        										position: 'absolute',
 	        										right: '5%',
-	        										'align-content': 'flex-end',
+	        										'alignContent': 'flex-end',
 	        										padding: 0,
 	        										}}
 	        							>
@@ -202,9 +224,11 @@ class CommentModal extends Component {
 	        				</Fragment>
 	        			))}
 	        			<hr />
+	        			{this.isLoading && <div>Loading more notes...</div>}
+	        			{this.error && <div>Could not load more notes</div>}
 	        		</div>
 	        		<div className='note-input' id='note-input'>
-	    				<textarea ref={this.textAreaRef} className='note-text' id='note-text' maxlength={2000} rows={1} type='text' placeholder='Post a note...' onChange={this.handleNoteText} required />
+	    				<textarea ref={this.textAreaRef} className='note-text' id='note-text' maxLength={2000} rows={1} type='text' placeholder='Post a note...' onChange={this.handleNoteText} required />
 	        		</div>
 	        		<CustomButton id='note-button' onClick={this.handlePost}>Post</CustomButton>
 	        	</div>
