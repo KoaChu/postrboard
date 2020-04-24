@@ -163,4 +163,15 @@
 	cursor: pointer;
 }
 
+.stop-select {
+	user-select: none;
+	pointer-events: none;
+}
+
+.notes-indicator {
+	margin-top: 0.2vw;
+	margin-left: 0.8vw;
+	transform: scale(0.9);
+}
+
 

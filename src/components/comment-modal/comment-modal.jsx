@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { firestore, firebaseFirestore } from '../../firebase/firebase-utils';
 import debounce from 'lodash.debounce';
 
+import LoadingIndicator from '../loading-indicator/loading-indicator';
 import CustomButton from '../custom-button/custom-button';
 
 import './comment-modal.scss';
@@ -19,12 +20,16 @@ class CommentModal extends Component {
 
         this.state = {
         	notes: [],
+        	justPosted: [],
         	error: false,
         	isLoading: true,
         	hasMore: true,
         	noteText: '',
         	lastCreatedAt: '',
         	lastText: '',
+        	postingButtonText: 'Post',
+        	stopSelect: '',
+        	loadingText: 'Loading',
         }
     }
 
@@ -36,6 +41,53 @@ class CommentModal extends Component {
     shouldComponentUpdate(nextProps, nextState) {
     	return nextProps.imgName === this.props.imgName;
     };
+
+    handleDelete = (event) => {
+    	var result = window.confirm('Are you sure?');
+    	const currNoteId = event.target.parentElement.getAttribute('notekey');
+
+    	if(result === true) {
+    		this.setState({
+    			isLoading: true,
+    			loadingText: 'Deleting'
+    		});
+    		const deleteNoteRef = firestore.doc(`users/${this.props.imgUid}/posts/${this.props.imgName}/notes/${currNoteId}`);
+    		const postRef = firestore.doc(`users/${this.props.imgUid}/posts/${this.props.imgName}`);
+
+    		event.target.parentElement.style.display = 'none';
+
+    		deleteNoteRef.delete()
+    					.then(() => {
+    						postRef.update({
+					    		notes: firebaseFirestore.FieldValue.increment(-1),
+					    	})
+					    	.then(() => {
+					    		this.setState({
+					    			isLoading: false,
+					    			loadingText: 'Loading'
+					    		});
+					    	})
+					    	.catch((err) => {
+					    		this.setState({
+					    			isLoading: false,
+					    			loadingText: 'Loading'
+					    		});
+					    		console.log(err.message);
+					    	});
+    					})
+    					.catch((err) => {
+    						this.setState({
+				    			isLoading: false,
+				    			loadingText: 'Loading'
+				    		});
+    						console.log(err.message);
+    					})
+    		// console.log(event.target.parentElement);
+    	} else {
+    		return;
+    	}
+    	// console.log(event.target.parentElement);
+    }
 
     handleNoteText = (event) => {
     	this.setState({
@@ -60,7 +112,10 @@ class CommentModal extends Component {
     	this.textAreaRef.current.value = "";
 
 		this.setState({
-			isLoading: true
+			isLoading: true,
+			postingButtonText: 'Posting',
+			stopSelect: 'stop-select',
+			loadingText: 'Posting'
 		});
 		const localUser = JSON.parse(localStorage.getItem('currentUser'));	
     	const uid = localUser.id;
@@ -87,19 +142,47 @@ class CommentModal extends Component {
     	}).then((ref) => {
     		const noteId = ref.id;
     		const newNoteRef = firestore.doc(`users/${this.props.imgUid}/posts/${this.props.imgName}/notes/${noteId}`)
-    		// console.log(ref.id);
+    		const newNote = {
+    			displayName,
+				imageUrl,
+				createdAt,
+				text,
+				uid,
+				noteId,
+    		};
+    		// this.state.notes.unshift(newNote);
+
+    		// console.log(JSON.stringify(newNote));
 
     		newNoteRef.update({
     			noteId,
     		}).then((result) => {
 	    		this.setState({
-	    			isLoading: false
+	    			isLoading: false,
+	    			postingButtonText: 'Post',
+	    			stopSelect: '',
+	    			justPosted: this.state.justPosted.concat(newNote),
+	    			loadingText: 'Loading',
+	    			// notes: this.state.notes,
 	    		});
     		}).catch((err) => {
     			console.log(err);
+    			this.setState({
+	    			isLoading: false,
+	    			postingButtonText: 'Post',
+	    			stopSelect: '',
+	    			loadingText: 'Loading',
+	    		});
     		}); 		
     	}).catch((err) => {
     		console.log(err.message);
+    		this.setState({
+    			isLoading: false,
+    			postingButtonText: 'Post',
+    			stopSelect: '',
+    			loadingText: 'Loading',
+    			// notes: this.state.notes,
+	    	});
     	});
 
     	postRef.update({
@@ -148,6 +231,9 @@ class CommentModal extends Component {
 				})
 				.catch((err) => {
 					console.log(err.message);
+					this.setState({
+						isLoading: false,
+					});
 				});
 	};
 
@@ -159,6 +245,7 @@ class CommentModal extends Component {
 	      hasMore,
 	      isLoading,
 	      notes,
+	      justPosted,
 	    } = this.state;
 
         return (
@@ -172,10 +259,72 @@ class CommentModal extends Component {
 	        	<div className='comment-area'>
 	        		<span className='comment-header'>@posterUserName</span>
 	        		<div className='comments' id='comments' onScroll={this.handleScroll}>
+	        			{this.state.justPosted.length > 0 && 
+	        				justPosted.slice().reverse().map(postedNote => (
+	        						<Fragment key={postedNote.noteId}>
+	        							<hr />
+	        							<div style={{display: 'flex',
+	        										backgroundColor: '#e6f7ff'
+	        										}}
+	        								notekey={postedNote.noteId}
+	        							>
+			        						<img alt={postedNote.displayName}
+			        							src={postedNote.imageUrl}
+			        							style={{
+									                  borderRadius: '50%',
+									                  border: '1px solid black',
+									                  height: 20,
+									                  marginRight: 5,
+									                  marginLeft: 8,
+									                  width: 20,
+									                }}
+									        />
+									        <div>
+									        	<h5 style={{marginTop: '0.01vw'}}>
+									        		@{postedNote.displayName}
+									        	</h5>
+									        	<p style={{marginTop: '-1.5vw',
+									        			marginRight: '1vw',
+									        			'textAlign': 'left'
+									        			}}>
+									        		{postedNote.text}
+									        	</p>
+									        	<p style={{fontSize: '0.8vw',
+									        			fontStyle: 'italic',
+									        			color: '#777',
+									        			marginTop: '-1vw',
+									        			marginBottom: '0vw'
+									        	}}>
+									        		{postedNote.createdAt.toDateString()}
+									        	</p>
+									        </div>
+			        						{(JSON.parse(localStorage.getItem('currentUser')).id === this.props.imgUid) 
+			        						|| (JSON.parse(localStorage.getItem('currentUser')).id === postedNote.uid)
+			        						? <span className='note-delete' 
+			        								style={{color: 'maroon',
+			        										position: 'absolute',
+			        										right: '5%',
+			        										'alignContent': 'flex-end',
+			        										padding: 0,
+			        										}}
+			        								onClick={this.handleDelete}
+			        							>
+			        							&times;
+			        						  </span>
+			        						: null
+			        						}
+			        					</div>
+	        						</Fragment>
+	        					))}
+	        				<hr />
+
 	        			{notes.map(note => (
 	        				<Fragment key={note.noteId}>
 	        					<hr />
-	        					<div style={{display: 'flex'}}>
+	        					<div style={{display: 'flex'
+	        								}}
+	        						 notekey={note.noteId}
+	        					>
 	        						<img alt={note.displayName}
 	        							src={note.imageUrl}
 	        							style={{
@@ -215,6 +364,7 @@ class CommentModal extends Component {
 	        										'alignContent': 'flex-end',
 	        										padding: 0,
 	        										}}
+	        								onClick={this.handleDelete}
 	        							>
 	        							&times;
 	        						  </span>
@@ -230,7 +380,8 @@ class CommentModal extends Component {
 	        		<div className='note-input' id='note-input'>
 	    				<textarea ref={this.textAreaRef} className='note-text' id='note-text' maxLength={2000} rows={1} type='text' placeholder='Post a note...' onChange={this.handleNoteText} required />
 	        		</div>
-	        		<CustomButton id='note-button' onClick={this.handlePost}>Post</CustomButton>
+	        		{isLoading && <div className='notes-indicator'><LoadingIndicator className='loading-indicator' loadingText={this.state.loadingText} /></div>}
+	        		<CustomButton className={`custom-button ${this.state.stopSelect}`} id='note-button' onClick={this.handlePost}>{this.state.postingButtonText}</CustomButton>
 	        	</div>
         	</div>
         );

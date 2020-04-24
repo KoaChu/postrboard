@@ -149,7 +149,7 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
               onDeleteIndexes(parseInt(imgIndex));
               mediaDeleteRef.delete()
                             .then(() => {
-                              console.log('file deleted successfully');
+                              // console.log('file deleted successfully');
                               setIsDeleting(false);
                               setTimeout(() => {
                                 document.getElementById('hidden-refresh').click();
