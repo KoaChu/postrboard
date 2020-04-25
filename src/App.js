@@ -18,6 +18,7 @@ import NotesPage from './pages/notespage/notespage';
 import MyBoardPage from './pages/myboardpage/myboardpage';
 import FollowingPage from './pages/followingpage/followingpage';
 import FollowersPage from './pages/followerspage/followerspage';
+import UserPage from './pages/userpage/userpage';
 
 
 class App extends Component {
@@ -70,6 +71,7 @@ class App extends Component {
                 <Route exact path='/followers' render={() => localStorage.getItem('currentUser') ? (<FollowersPage />) : (<Redirect to='/signin' />)} />
                 <Route exact path='/myboard' render={() => localStorage.getItem('currentUser') ? (<MyBoardPage />) : (<Redirect to='/signin' />)} />
                 <Route exact path='/notes' render={() => localStorage.getItem('currentUser') ? (<NotesPage />) : (<Redirect to='/signin' />)} />
+                <Route path='/user/:displayName' render={(matchProps) => localStorage.getItem('currentUser') ? (<UserPage {...matchProps} {...this.props} />) : (<Redirect to='/signin' />)} />
               </Switch>
            </div>
         );

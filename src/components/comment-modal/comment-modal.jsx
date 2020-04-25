@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { firestore, firebaseFirestore } from '../../firebase/firebase-utils';
+import { Link } from 'react-router-dom';
 import debounce from 'lodash.debounce';
 
 import LoadingIndicator from '../loading-indicator/loading-indicator';
@@ -30,16 +31,41 @@ class CommentModal extends Component {
         	postingButtonText: 'Post',
         	stopSelect: '',
         	loadingText: 'Loading',
+        	postDisplayName: '',
         }
     }
 
     componentDidMount() {
     	this.fetchNotes();
+    	this.fetchDisplayName();
     	// console.log('notes fetched');
     };
 
     shouldComponentUpdate(nextProps, nextState) {
     	return nextProps.imgName === this.props.imgName;
+    };
+
+    fetchDisplayName = () => {
+    	const usernamesRef = firestore.collection('usernames');
+
+    	if(!this.props.imgName) {
+			return;
+		}
+
+    	usernamesRef.where('uid', '==', this.props.imgUid)
+    				.limit(1)
+    				.get()
+    				.then((snapshot) => {
+    					snapshot.forEach((doc) => {
+    						this.setState({
+    							postDisplayName: doc.id
+    						});
+    						// console.log(doc.id);
+    					})
+    				})
+    				.catch((err) => {
+    					console.log('Error fetching displayname: ' + err.message);
+    				});
     };
 
     handleDelete = (event) => {
@@ -237,6 +263,15 @@ class CommentModal extends Component {
 				});
 	};
 
+	clickClose = () => {
+		document.getElementById('comment-close').click();
+	};
+
+	handleUserLink = () => {
+		document.getElementById('user-note-link').click();
+		// console.log('clicked');
+	};
+
     render() {
     	// console.log('rendered...notes: ' + JSON.stringify(this.state.notes) + 'imgName: ' + this.state.imgName);
 
@@ -250,14 +285,15 @@ class CommentModal extends Component {
 
         return (
             <div className='notes-modal'>
-		        <div className='comment-modal'>
+		        <div className='comment-modal' onClick={this.clickClose}>
 		        </div>
-	        	<a className="comment-close" href='#'>&times;</a>
+	        	<a className="comment-close" id='comment-close' href='#'>&times;</a>
 	        	<div className='comment-image'>
 	        		<img src={this.props.imgSrc} alt='image' className='notes-image'/>
 	        	</div>
 	        	<div className='comment-area'>
-	        		<span className='comment-header'>@posterUserName</span>
+	        	<Link className='hidden-input' to={`/user/${this.state.postDisplayName}`} id='user-note-link' />
+	        		<span className='comment-header' onClick={this.handleUserLink}>@{this.state.postDisplayName}</span>
 	        		<div className='comments' id='comments' onScroll={this.handleScroll}>
 	        			{this.state.justPosted.length > 0 && 
 	        				justPosted.slice().reverse().map(postedNote => (
@@ -389,66 +425,3 @@ class CommentModal extends Component {
 }
 
 export default CommentModal;
-
-
-// const CommentModal = ({ imgSrc, imgUid, imgName }) => {
-
-// 	const [notes, setNotes] = useState([]);
-// 	const [isLoading, setIsLoading] = useState(true);
-// 	const [error, setError] = useState(false);
-// 	const [hasMore, setHasMore] = useState(true);
-
-// 	const handlePost = () => {
-// 		console.log('handlepost');
-// 	};
-
-// 	const fetchNotes = () => {
-// 		setIsLoading(true);
-
-// 		const notesRef = firestore.collection(`users/${imgUid}/posts/${imgName}/notes`);
-
-// 		notesRef.orderBy('createdAt', 'desc')
-// 				.limit(10)
-// 				.get()
-// 				.then((snapshot) => {
-// 					const nextNotes = snapshot.docs.map(doc => ({
-// 						displayName: doc.id,
-// 						imageUrl: doc.data().imageUrl,
-// 						createdAt: doc.data().createdAt,
-// 						text: doc.data().text,
-// 						noteUid: doc.data().uid
-// 					}));
-// 				})
-// 				.then(() => {
-// 					setNotes(nextNotes);
-// 					setIsLoading(false);
-// 				})
-// 				.catch((err) => {
-// 					console.log(err.message);
-// 				});
-// 	};
-
-//     return (
-//     	<div className='notes-modal'>
-// 	        <div className='comment-modal'>
-// 	        </div>
-//         	<a class="comment-close" href='#'>&times;</a>
-//         	<div className='comment-image'>
-//         		<img src={imgSrc} alt='post-image' className='notes-image'/>
-//         	</div>
-//         	<div className='comment-area'>
-//         		<span className='comment-header'>@posterUserName</span>
-//         		<div className='comments'>
-
-//         		</div>
-//         		<div className='note-input'>
-//     				<textarea className='note-text' id='note-text' rows={1} type='text' placeholder='Post a note...' onChange={() => {console.log('hi');}} required />
-//         		</div>
-//         		<CustomButton id='note-button' onClick={handlePost}>Post</CustomButton>
-//         	</div>
-//         </div>
-//     );
-// };
-
-
-// export default CommentModal;

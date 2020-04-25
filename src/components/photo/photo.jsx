@@ -44,7 +44,7 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
   // };
 
   const onMouseOver = async (event) => {
-    // console.log(event.target.parentElement.parentElement.firstElementChild.getAttribute('name'));
+    // console.log(event.target.parentElement.parentElement.firstElementChild);
 
     setImgText(event.target.parentElement.parentElement.firstElementChild.getAttribute('text'));
     setImgUid(event.target.parentElement.parentElement.firstElementChild.getAttribute('imguid'));
