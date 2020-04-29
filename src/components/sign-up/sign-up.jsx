@@ -53,6 +53,10 @@ class SignUp extends React.Component {
 			alert("Spaces not allowed in username or password.");
 			return;
 		}
+		if((/@/.test(displayName)) || (/!/.test(displayName)) || (/#/.test(displayName))) {
+			alert("Username cannot contain !, @, #");
+			return;
+		}
 
 
 		try {

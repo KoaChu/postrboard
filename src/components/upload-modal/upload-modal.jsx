@@ -162,7 +162,7 @@ class UploadModal extends Component {
                               {this.state.isLoading ? <span className='loading-indicator'>Loading...</span> :
     				          <img src={this.state.filePreview} alt='' className='image-preview'/>
                               }
-                              <span className={this.state.instructionsVis}>Upload a video/image</span>
+                              {/*<span className={this.state.instructionsVis}>Upload a video/image</span>*/}
     				        </div>
     				        <div className='content-text-wrapper'>
     				        	<textarea className='content-text' id='post-description' type='text' placeholder='Write a description...' onChange={this.handleTextChange} required />

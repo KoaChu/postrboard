@@ -53,6 +53,7 @@ const config = {
       try {
         await usernameRef.set({
           uid,
+          displayName,
         })
       } catch (error) {
         console.log('error creating username', error.message);

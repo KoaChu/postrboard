@@ -38,11 +38,18 @@ class CommentModal extends Component {
     componentDidMount() {
     	this.fetchNotes();
     	this.fetchDisplayName();
+    	var body = document.getElementsByTagName( 'body' )[0];
+    	body.setAttribute('class', 'noscroll');
     	// console.log('notes fetched');
     };
 
     shouldComponentUpdate(nextProps, nextState) {
     	return nextProps.imgName === this.props.imgName;
+    };
+
+    componentWillUnmount() {
+		var body = document.getElementsByTagName( 'body' )[0];
+		body.classList.remove('noscroll');
     };
 
     fetchDisplayName = () => {

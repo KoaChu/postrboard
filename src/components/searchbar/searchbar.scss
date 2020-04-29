@@ -1,0 +1,25 @@
+.search-input {
+	font-weight: bold;
+	color: black;
+	font-size: 0.8em;
+	// outline-style: groove;
+	outline: none;
+	outline-color: #555;
+	outline-radius: 100px 100px 100px 100px;
+	width: inherit;
+	height: inherit;
+	border: none;
+	border-radius: 100px 100px 100px 100px;
+	padding-left: 12px;
+	padding-right: 12px;
+
+	&:focus {
+		box-shadow: 0 0 5px 3px grey;
+	}
+}
+
+.searchbar {
+	// border: 1px solid red;
+	width: 20vw;
+	height: 2vw;
+}
