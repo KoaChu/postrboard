@@ -24,6 +24,28 @@
 	height: 100%;
 }
 
+.result-item:hover {
+	background: #3399ff !important,
+}
+
+.option-search-select {
+	color: white;
+	outline: none;
+	background-color: black;
+	position: absolute;
+	font-size: 0.8vw;
+	text-align-last: center;
+	top: 22.14%;
+	right: 40.16%;
+	width: 3.5vw;
+	height: 1.8vw;
+	border-radius: 100px 100px 100px 100px;
+
+	&:hover {
+		cursor: pointer;
+	}
+}
+
 .search-page-submit-button {
 	font-size: 1.35vw !important;
 	width: 15vw;
