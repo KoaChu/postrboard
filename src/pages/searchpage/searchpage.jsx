@@ -3,6 +3,7 @@
 
 import React, { Component, Fragment } from 'react';
 import { firestore } from '../../firebase/firebase-utils';
+import { Link } from 'react-router-dom';
 
 import './searchpage.scss';
 
@@ -25,6 +26,7 @@ class SearchPage extends Component {
         	isLoading: false,
         	error: false,
         	lastDisplayName: '',
+        	searchResultDisplayName: '',
         }
     }
 
@@ -35,6 +37,7 @@ class SearchPage extends Component {
     onSubmit = () => {
     	this.setState({
     			isLoading: true,
+    			results: [],
     	});
     	const queryKey = document.getElementById('search-input').value;
 
@@ -51,7 +54,7 @@ class SearchPage extends Component {
 			firestore.collection('users')
 					.where('displayName', '>=', queryKey)
 					.orderBy('displayName')
-					.startAfter(this.state.lastDisplayName)
+					// .startAfter(this.state.lastDisplayName)
 					.limit(12)
 					.get()
 					.then((snapshot) => {
@@ -117,6 +120,26 @@ class SearchPage extends Component {
     	}
     };
 
+    handleMouseOver = (event) => {
+    	this.setState({
+    		searchResultDisplayName: event.target.getAttribute('resultkey'),
+    	});
+    	// console.log(event.target.getAttribute('resultkey'));
+    };
+
+    handleResultClick = () => {
+    	document.getElementById('search-item-link').click();
+    };
+
+    handleEnterClick = (e) => {
+    	if(e.key === 'Enter') {
+    		this.onSubmit();
+    	} else {
+    		return;
+    	}
+    };
+
+
     render() {
 
     	const {
@@ -128,15 +151,18 @@ class SearchPage extends Component {
 
         return (
             <div className='searchpage'>
-	        	<h3 style={{textDecoration: 'underline'}}>Discover something new</h3>
-	        	<SearchBar id='searchpage-searchbar' />
-	        	<select className='option-search-select' onChange={this.handleSearchOption}>
+	        	<h3 style={{textDecoration: 'underline', pointerEvents: 'none', userSelect: 'none'}}>Discover something new</h3>
+	        	<SearchBar id='searchpage-searchbar' 
+	        			   keyDown={this.handleEnterClick}
+	        	/>
+	        	<select className='option-search-select' onChange={this.handleSearchOption} onKeyDown={this.handleEnterClick}>
         			<option value='0' default>all</option>
         			<option value='1'>person</option>
         			<option value='2'>theme</option>
     			</select>
 	        	<span><CustomButton className='search-page-submit-button custom-button' onClick={this.onSubmit}>search</CustomButton></span>
-	        	<div className='search-results' style={{color: 'black'}}>
+	        	<Link className='hidden-input' to={`/user/${this.state.searchResultDisplayName}`} id='search-item-link' />
+	        	<div className='search-results' style={{color: 'black', userSelect: 'none'}}>
 	        		{this.state.results.length===0 && 'search results'}
 	        		{results.map(result => (
 	        				<Fragment key={result.displayName}>
@@ -149,11 +175,14 @@ class SearchPage extends Component {
 	        								borderRadius: '100pt 100pt 100pt 100pt',
 	        								width: '25%',
 	        								background: 'white',
+	        								userSelect: 'none',
 	        								}}
-	        						 notekey={result.displayName}
+	        						 resultkey={result.displayName}
 	        						 className='result-item'
+	        						 onMouseEnter={this.handleMouseOver}
+	        						 onClick={this.handleResultClick}
 	        					>
-	        						<img onerror="this.style.display='none'"
+	        						<img onError={() => {return;}}
 	        							src={result.imageUrl}
 	        							style={{
 							                  borderRadius: '50%',
@@ -163,12 +192,15 @@ class SearchPage extends Component {
 							                  marginLeft: 8,
 							                  width: '4.5vw',
 							                  transform: 'translate(-10%, 0%)',
+							                  pointerEvents: 'none',
 							                }}
 							        />
-							        <div>
+							        <div style={{pointerEvents: 'none'}}>
 							        	<h5 style={{marginTop: '2.5vw',
 							                  		transform: 'translate(-10%, 0%)',
 							                  		fontSize: '1vw',
+							                  		pointerEvents: 'none',
+							                  		userSelect: 'none',
 							        		}}>
 							        		@{result.displayName}
 							        	</h5>

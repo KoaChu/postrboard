@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 
 import './searchbar.scss';
 
-const SearchBar = ({ searchChange }) => {
+const SearchBar = ({ searchChange, keyDown }) => {
     return (
         <div className='searchbar'>
         	<input
@@ -11,6 +11,7 @@ const SearchBar = ({ searchChange }) => {
         		type='search'
         		placeholder='find a person or theme...'
         		onChange={searchChange}
+                onKeyDown={keyDown}
         	/>
         </div>
     );
