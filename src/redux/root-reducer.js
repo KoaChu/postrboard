@@ -4,6 +4,7 @@ import { combineReducers } from 'redux';
 
 import userReducer from './user/user-reducer';
 import profileReducer from './profile/profile-reducer';
+import currentAccountReducer from './current-account/current-account-reducer';
 
 // const persistConfig = {
 // 	key: 'root',
@@ -14,4 +15,5 @@ import profileReducer from './profile/profile-reducer';
 export default combineReducers({
 	user: userReducer,
 	profileIcon: profileReducer,
+	account: currentAccountReducer,
 })

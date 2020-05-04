@@ -4,11 +4,13 @@
 import React, { Component, Fragment } from 'react';
 import { firestore } from '../../firebase/firebase-utils';
 import { Link } from 'react-router-dom';
+import debounce from 'lodash.debounce';
 
 import './searchpage.scss';
 
 import SearchBar from '../../components/searchbar/searchbar';
 import CustomButton from '../../components/custom-button/custom-button';
+import LoadingIndicator from '../../components/loading-indicator/loading-indicator';
 
 class SearchPage extends Component {
 
@@ -21,6 +23,8 @@ class SearchPage extends Component {
         this.state = {
         	// queryKeyword: '',
         	queryOption: '',
+        	oldQueryKeyword: '',
+        	oldQueryOption: '',
         	results: [],
         	hasMore: true,
         	isLoading: false,
@@ -30,16 +34,86 @@ class SearchPage extends Component {
         }
     }
 
-    // onSearchChange = (event) => {
-    // 	console.log(event.target.value);
-    // };
+    handleResultsScroll = debounce((event) => {
+    	const divRef = document.getElementById('search-results');
+
+    	// console.log('scrollHeight: ' + divRef.scrollHeight + 'scrollTop: ' + divRef.scrollTop + 'clientHeight: ' + divRef.clientHeight);
+    	if(this.state.error || this.state.isLoading || !this.state.hasMore) return;
+
+    	if(divRef.scrollTop + divRef.clientHeight === divRef.scrollHeight) {
+    		// console.log('bottom reached');
+    		this.fetchMoreResults();
+    	}
+    }, 100);
+
+    fetchMoreResults = (count=12) => {
+    	var queryKey = this.state.oldQueryKeyword;
+    	var oldQueryOption = this.state.oldQueryOption
+
+    	this.setState({
+    			isLoading: true,
+    	});
+
+    	if(queryKey === null || queryKey === '') {
+			this.setState({
+				isLoading: false,
+				results: [],
+				lastDisplayName: '',
+			});
+			return;
+		}
+
+		if(this.state.oldQueryOption === 'person' || this.state.oldQueryOption === '') {
+			// console.log('all ' + queryKey);
+			firestore.collection('users')
+					.where('displayName', '>=', queryKey)
+					.orderBy('displayName')
+					.startAfter(this.state.lastDisplayName)
+					.limit(12)
+					.get()
+					.then((snapshot) => {
+						const last = snapshot.docs[snapshot.docs.length - 1];
+						const nextResults = snapshot.docs.map(doc => ({
+							displayName: doc.data().displayName,
+							imageUrl: doc.data().imageUrl
+						}));
+
+						this.setState({
+							results: this.state.results.concat(nextResults),
+							isLoading: false,
+							lastDisplayName: last.data().displayName,
+						})
+					})
+					.catch((err) => {
+						console.log('err in search query: ' + err.message);
+						this.setState({
+							isLoading: false,
+							lastDisplayName: '',
+						});
+					});
+		} else {
+			console.log('theme ' + queryKey);
+		}
+
+    };
 
     onSubmit = () => {
+    	var queryKey = document.getElementById('search-input').value;
+
+    	if(queryKey.includes('#')) {
+			queryKey= queryKey.replace('#', '');
+		}
+		if(queryKey.includes('@')) {
+			queryKey = queryKey.replace('@', '');
+			console.log(queryKey);
+		}
+
     	this.setState({
     			isLoading: true,
     			results: [],
+    			oldQueryKeyword: queryKey,
+    			oldQueryOption: this.state.queryOption
     	});
-    	const queryKey = document.getElementById('search-input').value;
 
 		if(queryKey === null || queryKey === '') {
 			this.setState({
@@ -49,7 +123,7 @@ class SearchPage extends Component {
 			});
 			return;
 		}
-		if(this.state.queryOption === 'all' || this.state.queryOption === '') {
+		if(this.state.queryOption === 'person' || this.state.queryOption === '') {
 			// console.log('all ' + queryKey);
 			firestore.collection('users')
 					.where('displayName', '>=', queryKey)
@@ -77,19 +151,9 @@ class SearchPage extends Component {
 							lastDisplayName: '',
 						});
 					});
-		}
-		else if(this.state.queryOption === 'person'){
-			console.log('person ' + queryKey)
-		}
-		else if(this.state.queryOption === 'theme') {
+		} else {
 			console.log('theme ' + queryKey);
 		}
-		// if(queryKey.includes('#')) {
-		// 	console.log('contains #');
-		// }
-		// if(queryKey.includes('@')) {
-		// 	console.log('contains @');
-		// }
     };
 
     handleSearchOption = (event) => {
@@ -99,22 +163,17 @@ class SearchPage extends Component {
     	switch (event.target.value) {
     		case '0':
     			this.setState({
-    				queryOption: 'all'
-    			});
-    			break;
-    		case '1':
-    			this.setState({
     				queryOption: 'person'
     			});
     			break;
-    		case '2':
+    		case '1':
     			this.setState({
     				queryOption: 'theme'
     			});
     			break;
     		default:
     			this.setState({
-    				queryOption: 'all'
+    				queryOption: 'person'
     			});
     			break;
     	}
@@ -156,14 +215,13 @@ class SearchPage extends Component {
 	        			   keyDown={this.handleEnterClick}
 	        	/>
 	        	<select className='option-search-select' onChange={this.handleSearchOption} onKeyDown={this.handleEnterClick}>
-        			<option value='0' default>all</option>
-        			<option value='1'>person</option>
-        			<option value='2'>theme</option>
+        			<option value='0' default>person</option>
+        			<option value='1'>theme</option>
     			</select>
 	        	<span><CustomButton className='search-page-submit-button custom-button' onClick={this.onSubmit}>search</CustomButton></span>
 	        	<Link className='hidden-input' to={`/user/${this.state.searchResultDisplayName}`} id='search-item-link' />
-	        	<div className='search-results' style={{color: 'black', userSelect: 'none'}}>
-	        		{this.state.results.length===0 && 'search results'}
+	        	<div className='search-results' id='search-results' style={{color: 'black', userSelect: 'none'}}>
+	        		{results.length===0 && isLoading === false && 'search results'}
 	        		{results.map(result => (
 	        				<Fragment key={result.displayName}>
 	        					<hr />
@@ -210,6 +268,7 @@ class SearchPage extends Component {
 	        			))}
 	        			<hr />
 	        	</div>
+	        	{isLoading && <span className='searchpage-loading'><LoadingIndicator /></span>}
         	</div>
         );
     }

@@ -9,7 +9,7 @@ const SearchBar = ({ searchChange, keyDown }) => {
         		className='search-input'
         		id='search-input'
         		type='search'
-        		placeholder='find a person or theme...'
+        		placeholder='find a @person or #theme...'
         		onChange={searchChange}
                 onKeyDown={keyDown}
         	/>

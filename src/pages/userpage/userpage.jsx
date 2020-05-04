@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import debounce from 'lodash.debounce';
 
 import { auth, firestore } from '../../firebase/firebase-utils';
+import { setCurrentAccount } from '../../redux/current-account/current-account-actions';
 
 import ImageGallery from '../../components/image-gallery/image-gallery';
 
@@ -41,19 +43,27 @@ class UserPage extends Component {
     }
 
     componentDidMount(){
-    	const pageUidRef = firestore.collection('usernames').where('displayName', '==', this.state.pageDisplayName).limit(1);
+        const {setCurrentAccount} = this.props;
+    	const pageUidRef = firestore.collection('users').where('displayName', '==', this.state.pageDisplayName).limit(1);
     	pageUidRef.get()
     			.then((snapshot) => {
     				snapshot.forEach((doc) => {
     					// console.log(doc.id);
     					this.setState({
-    						pageUid: doc.data().uid,
+    						pageUid: doc.id,
     					});
+                        const cA = {
+                            displayName: doc.data().displayName,
+                            imageUrl: doc.data().imageUrl,
+                            uid: doc.id
+                        };
+                        setCurrentAccount(cA);
     				});
     			})
     			.then(() => {
     				this.getMaxIndex();
     				this.fetchImages();
+                    // console.log(JSON.parse(localStorage.getItem('currentUser')).displayName);
     			})
     			.catch((err) => {
     				console.log('Error mounting userpage: ' + err.message);
@@ -167,4 +177,8 @@ class UserPage extends Component {
 const container = document.createElement('div');
 document.body.appendChild(container);
 
-export default UserPage;
+const mapDispatchToProps = dispatch => ({
+  setCurrentAccount: account => dispatch(setCurrentAccount(account))
+});
+
+export default connect(null, mapDispatchToProps)(UserPage);

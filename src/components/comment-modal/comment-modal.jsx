@@ -279,6 +279,17 @@ class CommentModal extends Component {
 		// console.log('clicked');
 	};
 
+	// handleNoteMouseOver = (event) => {
+	// 	this.setState({
+	// 		noteLinkName: event.target.firstChild.getAttribute('alt'),
+	// 	});
+	// 	console.log(event.target);
+	// };
+
+	// handleNoteClick = (event) => {
+	// 	document.getElementById('user-note-poster-link').click();
+	// };
+
     render() {
     	// console.log('rendered...notes: ' + JSON.stringify(this.state.notes) + 'imgName: ' + this.state.imgName);
 
@@ -302,6 +313,7 @@ class CommentModal extends Component {
 	        	<Link className='hidden-input' to={`/user/${this.state.postDisplayName}`} id='user-note-link' />
 	        		<span className='comment-header' onClick={this.handleUserLink}>@{this.state.postDisplayName}</span>
 	        		<div className='comments' id='comments' onScroll={this.handleScroll}>
+	        			{/*<Link className='hidden-input' to={`/user/${this.state.postDisplayName}`} id='user-note-poster-link' />*/}
 	        			{this.state.justPosted.length > 0 && 
 	        				justPosted.slice().reverse().map(postedNote => (
 	        						<Fragment key={postedNote.noteId}>
@@ -320,10 +332,12 @@ class CommentModal extends Component {
 									                  marginRight: 5,
 									                  marginLeft: 8,
 									                  width: 20,
+									                  pointerEvents: 'none',
 									                }}
 									        />
-									        <div>
-									        	<h5 style={{marginTop: '0.01vw'}}>
+									        <div style={{pointerEvents: 'none',}}>
+									        	<h5 style={{marginTop: '0.01vw'}}
+									        	onClick={this.handleNoteClick}>
 									        		@{postedNote.displayName}
 									        	</h5>
 									        	<p style={{marginTop: '-1.5vw',
@@ -377,9 +391,10 @@ class CommentModal extends Component {
 							                  marginRight: 5,
 							                  marginLeft: 8,
 							                  width: 20,
+							                  pointerEvents: 'none',
 							                }}
 							        />
-							        <div>
+							        <div style={{pointerEvents: 'none',}}>
 							        	<h5 style={{marginTop: '0.01vw'}}>
 							        		@{note.displayName}
 							        	</h5>
