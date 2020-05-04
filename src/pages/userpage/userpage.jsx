@@ -44,20 +44,29 @@ class UserPage extends Component {
 
     componentDidMount(){
         const {setCurrentAccount} = this.props;
+        const localUser = JSON.parse(localStorage.getItem('currentUser'));  
+        const localUid = localUser.id;
     	const pageUidRef = firestore.collection('users').where('displayName', '==', this.state.pageDisplayName).limit(1);
     	pageUidRef.get()
     			.then((snapshot) => {
     				snapshot.forEach((doc) => {
-    					// console.log(doc.id);
+
     					this.setState({
     						pageUid: doc.id,
     					});
+
                         const cA = {
                             displayName: doc.data().displayName,
                             imageUrl: doc.data().imageUrl,
                             uid: doc.id
                         };
+
                         setCurrentAccount(cA);
+                        // if(cA.uid === localUid){
+                        //     setCurrentAccount(null);
+                        // } else {
+                        //     setCurrentAccount(cA);
+                        // }
     				});
     			})
     			.then(() => {
@@ -69,6 +78,11 @@ class UserPage extends Component {
     				console.log('Error mounting userpage: ' + err.message);
     			});
     	// console.log(this.state.pageDisplayName);
+    }
+
+    componentWillUnmount() {
+        const {setCurrentAccount} = this.props;
+        setCurrentAccount(null);
     }
 
     fetchImages = debounce((count=10) => { 

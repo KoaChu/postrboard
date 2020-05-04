@@ -3,7 +3,7 @@ import { createSelector } from 'reselect';
 const selectAccount = state => state.account;
 
 export const selectCurrentAccount = createSelector(
-	[selectCurrentAccount],
+	[selectAccount],
 	(account) => account.currentAccount
 	);
 

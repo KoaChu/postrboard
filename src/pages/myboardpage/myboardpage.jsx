@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 // import { render } from 'react-dom';
 import debounce from 'lodash.debounce';
 
 import { auth, firestore } from '../../firebase/firebase-utils';
+import { setCurrentAccount } from '../../redux/current-account/current-account-actions';
 
 import './myboardpage.scss';
 
@@ -41,9 +43,23 @@ class MyBoardPage extends Component {
     }
 
     componentDidMount() {
+        const {setCurrentAccount} = this.props;
+        const localUser = JSON.parse(localStorage.getItem('currentUser'));  
+        const myUser = {
+            displayName: localUser.displayName,
+            uid: localUser.id,
+            imageUrl: localUser.imageUrl,
+        };
+
+        setCurrentAccount(myUser);
     	this.getImages();
         this.getMaxIndex();
     	// console.log(Date.now() + " component did mount: " + JSON.stringify(this.state.images));
+    }
+
+    componentWillUnmount() {
+        const {setCurrentAccount} = this.props;
+        setCurrentAccount(null);
     }
 
     getMaxIndex = () => {
@@ -139,6 +155,7 @@ class MyBoardPage extends Component {
         }
     }, 100);
 
+
     render() {
         // console.log('page rerendered');
     	// console.log(Date.now() + " in render: " + JSON.stringify(this.state.images));
@@ -157,4 +174,8 @@ const container = document.createElement('div');
 document.body.appendChild(container);
 // render(<MyBoardPage />, container);
 
-export default MyBoardPage;
+const mapDispatchToProps = dispatch => ({
+  setCurrentAccount: account => dispatch(setCurrentAccount(account))
+});
+
+export default connect(null, mapDispatchToProps)(MyBoardPage);
