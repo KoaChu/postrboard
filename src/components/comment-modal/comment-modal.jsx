@@ -305,7 +305,7 @@ class CommentModal extends Component {
             <div className='notes-modal'>
 		        <div className='comment-modal' onClick={this.clickClose}>
 		        </div>
-	        	<a className="comment-close" id='comment-close' href=''>&times;</a>
+	        	<a className="comment-close" id='comment-close' href='#'>&times;</a>
 	        	<div className='comment-image'>
 	        		<img src={this.props.imgSrc} alt='image' className='notes-image'/>
 	        	</div>

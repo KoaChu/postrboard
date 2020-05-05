@@ -1,0 +1,15 @@
+.followingpage {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.following-results {
+	height: 100vh;
+	width: 100%;
+	overflow-y: scroll;		
+}
+
+.following-result-item:hover {
+	background: #3399ff !important,
+}

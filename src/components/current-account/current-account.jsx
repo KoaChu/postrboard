@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { firestore } from '../../firebase/firebase-utils';
+import { firestore, firebaseFirestore } from '../../firebase/firebase-utils';
 
 import './current-account.scss';
 
@@ -54,31 +54,69 @@ class CurrentAccount extends Component {
         const localImageUrl = localUser.imageUrl;
         const localDisplayName = localUser.displayName;
 
+        const localUserFollowingCountRef = firestore.doc(`users/${localUid}`);
+        const currentAccountFollowersCountRef = firestore.doc(`users/${this.props.uid}`);
         const localUserFollowRef = firestore.doc(`users/${localUid}/following/${this.props.uid}`);
         const currentAccountFollowRef = firestore.doc(`users/${this.props.uid}/followers/${localUid}`);
 
-        localUserFollowRef.set({
-            uid: this.props.uid,
-            displayName: this.props.displayName,
-            imageUrl: this.props.imageUrl,
-        })
-        .then(() => {
-            try {       
-                currentAccountFollowRef.set({
-                uid: localUid,
-                displayName: localDisplayName,
-                imageUrl: localImageUrl,
-                });
-                this.setState({
-                    followed: true,
-                });
-            } catch(err) {
+        var image = this.props.imageUrl;
+
+        if(!image){
+            localUserFollowRef.set({
+                uid: this.props.uid,
+                displayName: this.props.displayName,
+            })
+            .then(() => {
+                try {       
+                    currentAccountFollowRef.set({
+                    uid: localUid,
+                    displayName: localDisplayName,
+                    });
+                    localUserFollowingCountRef.update({
+                        following: firebaseFirestore.FieldValue.increment(1),
+                    });
+                    currentAccountFollowersCountRef.update({
+                        followers: firebaseFirestore.FieldValue.increment(1),
+                    });
+                } catch(err) {
+                    console.log(err.message);
+                }
+            })
+            .catch((err) => {
                 console.log(err.message);
-            }
-        })
-        .catch((err) => {
-            console.log(err.message);
-        });
+            });;
+        } else {
+            localUserFollowRef.set({
+                uid: this.props.uid,
+                displayName: this.props.displayName,
+                imageUrl: this.props.imageUrl,
+            })
+            .then(() => {
+                try {       
+                    currentAccountFollowRef.set({
+                    uid: localUid,
+                    displayName: localDisplayName,
+                    imageUrl: localImageUrl,
+                    });
+                    localUserFollowingCountRef.update({
+                        following: firebaseFirestore.FieldValue.increment(1),
+                    });
+                    currentAccountFollowersCountRef.update({
+                        followers: firebaseFirestore.FieldValue.increment(1),
+                    });
+                } catch(err) {
+                    console.log(err.message);
+                }
+            })
+            .catch((err) => {
+                console.log(err.message);
+            });
+        }
+
+        this.setState({
+            followed: true,
+        });;
+        
         // console.log('followed');
     };
 
@@ -88,9 +126,17 @@ class CurrentAccount extends Component {
 
         const localUserFollowRef = firestore.doc(`users/${localUid}/following/${this.props.uid}`);
         const currentAccountFollowRef = firestore.doc(`users/${this.props.uid}/followers/${localUid}`);
+        const localUserFollowingCountRef = firestore.doc(`users/${localUid}`);
+        const currentAccountFollowersCountRef = firestore.doc(`users/${this.props.uid}`);
 
         localUserFollowRef.delete();
         currentAccountFollowRef.delete();
+        localUserFollowingCountRef.update({
+            following: firebaseFirestore.FieldValue.increment(-1),
+        });
+        currentAccountFollowersCountRef.update({
+            followers: firebaseFirestore.FieldValue.increment(-1),
+        });
 
         this.setState({
             followed: false,

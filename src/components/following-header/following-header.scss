@@ -1,0 +1,15 @@
+.following-header {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	text-align: center;
+	font-size: 1.5vw;
+	font-weight: 500;
+	margin-top: 1vw;
+	border-bottom: 1px solid black;
+	width: 20%;
+
+	.following-count {
+		margin-left: 0.5vw;
+	}
+}

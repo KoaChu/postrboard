@@ -1,0 +1,15 @@
+.followerspage {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.followers-results {
+	height: 100vh;
+	width: 100%;
+	overflow-y: scroll;		
+}
+
+.followers-result-item:hover {
+	background: #3399ff !important,
+}

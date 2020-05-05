@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { firestore, auth, onDeleteIndexes, storageRef } from '../../firebase/firebase-utils';
+import { firestore, auth, onDeleteIndexes, storageRef, firebaseFirestore } from '../../firebase/firebase-utils';
 
 import LoadingIndicator from '../loading-indicator/loading-indicator';
 import CommentModal from '../comment-modal/comment-modal';
@@ -115,7 +115,12 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
   };
 
   const handleLike = event => {
+    const localUser = JSON.parse(localStorage.getItem('currentUser'));  
+    const localDisplayName = localUser.displayName;
+
     const userLikeRef = firestore.doc(`users/${auth.currentUser.uid}/likes/${imgName}`);
+    const imageLikeRef = firestore.doc(`users/${imguid}/posts/${imgName}/likes/${localDisplayName}`)
+    const postRef = firestore.doc(`users/${imguid}/posts/${imgName}`);
     const imgRef = event.target.parentElement.parentElement.firstChild.nextSibling.getAttribute('name');
 
     if(permLike) {
@@ -123,15 +128,37 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
       firestore.doc(`users/${auth.currentUser.uid}/likes/${ imgRef }`)
                 .delete()
                 .then(() => {
+                  try {
+                    imageLikeRef.delete();
+                    postRef.update({
+                      likes: firebaseFirestore.FieldValue.increment(-1),
+                    });
+                    // console.log('deleted');
+                  } catch (err) {
+                    console.log(err.message);
+                  }
                   // console.log('deleted');
                 })
                 .catch((err) => {
                   console.log(err);
                 });
+      // imageLikeRef.delete();
     } else {
-      userLikeRef.set({
-        createdAt: new Date(),
-      })
+      try {
+        userLikeRef.set({
+          createdAt: new Date(),
+        });
+        imageLikeRef.set({
+          displayName: localDisplayName,
+          createdAt: new Date(),
+          uid: auth.currentUser.uid,
+        });
+        postRef.update({
+          likes: firebaseFirestore.FieldValue.increment(1),
+        });
+      } catch(err) {
+        console.log(err.message);
+      } 
     }
     setPermLike(!permLike);
   };
