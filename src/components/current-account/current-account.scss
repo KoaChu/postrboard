@@ -31,7 +31,21 @@
 		transform: scale(0.35);
 		position: absolute;
 		top: 20%;
-		right: 24.1%;
+		right: 24.2%;
+	}
+	.unfollow-button {
+		font-size: 2vw;
+		transform: scale(0.35);
+		position: absolute;
+		top: 20%;
+		right: 15.7%;
+	}
+	.unselectable {
+		color: black;
+		background-color: white;
+		user-select: none;
+		pointer-events: none;
+		border: 1px solid black;
 	}
 	// .message-button {
 	// 	font-size: 2vw;

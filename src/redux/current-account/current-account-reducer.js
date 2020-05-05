@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { CurrentAccountActionTypes } from './current-account-types';
 
 const INITIAL_STATE = {

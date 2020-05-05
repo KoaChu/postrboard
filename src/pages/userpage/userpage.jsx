@@ -44,8 +44,6 @@ class UserPage extends Component {
 
     componentDidMount(){
         const {setCurrentAccount} = this.props;
-        const localUser = JSON.parse(localStorage.getItem('currentUser'));  
-        const localUid = localUser.id;
     	const pageUidRef = firestore.collection('users').where('displayName', '==', this.state.pageDisplayName).limit(1);
     	pageUidRef.get()
     			.then((snapshot) => {
